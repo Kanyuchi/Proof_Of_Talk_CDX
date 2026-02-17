@@ -60,12 +60,28 @@ Non-obvious but high-value example:
 - Reuse across events compounds returns because model quality improves with historical outcome data.
 
 ## 6. Level 2 and Level 3 Build Evidence
-- `scripts/generate_matches.py` demonstrates recommendation generation.
+### Level 2 Evidence (Completed)
+- Scope and flow definition:
+  - `docs/level2/01-scope-and-user-flows.md`
+- Wireframes:
+  - `docs/level2/02-wireframes.md`
+- Data contracts mapped to UI:
+  - `docs/level2/03-data-contract-map.md`
+- Runnable demo:
+  - `scripts/generate_matches.py`
+  - `notebooks/matching_demo.ipynb`
+- Deterministic output artifacts:
+  - `data/match_results.json`
+  - `data/level2_summary.csv`
+  - `data/level2_summary.md`
+- Validation:
+  - `scripts/validate_level2.py` (ranking order, rationale presence, profile coverage)
+
+### Level 3 Evidence (Current Starter)
 - `app/main.py` provides a FastAPI backend with documented endpoints and dashboard serving.
 - `app/server.py` starts the FastAPI stack for quick local execution.
 - `app/static` provides a clickable web dashboard with organizer actions (approve/reject + notes).
 - `app/db.py` persists organizer actions in SQLite (`data/matchmaking.db`).
-- `data/match_results.json` contains reproducible output from the 5 profile test set.
 
 ## 7. Commercialization & Scale Path
 - Tiered monetization:

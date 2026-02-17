@@ -53,9 +53,9 @@ FastAPI docs (when dependencies are installed): `http://127.0.0.1:8000/docs`
 - `GET /docs` (FastAPI interactive docs)
 
 ## Level Mapping
-- Level 1: strategy docs in `docs/case-study-response.md` (to be completed with final business narrative)
-- Level 2: working recommendation script + initial UI
-- Level 3 (starter complete): clickable dashboard + enrichment + ranking + rationale generation
+- Level 1: strategy narrative complete in `docs/case-study-response.md`
+- Level 2: wireframes + runnable script/notebook + deterministic outputs complete in `docs/level2/*` and `notebooks/matching_demo.ipynb`
+- Level 3 (starter): clickable dashboard + enrichment + ranking + rationale generation
 
 ## Organizer Action Payload
 ```json
@@ -82,6 +82,22 @@ FastAPI docs (when dependencies are installed): `http://127.0.0.1:8000/docs`
 ```bash
 python3 -m unittest discover -s tests -v
 ```
+
+## Level 2 Runbook
+```bash
+python3 scripts/generate_matches.py
+python3 scripts/export_level2_summary.py
+python3 scripts/validate_level2.py
+```
+
+Level 2 artifacts:
+- `docs/level2/01-scope-and-user-flows.md`
+- `docs/level2/02-wireframes.md`
+- `docs/level2/03-data-contract-map.md`
+- `docs/level2/04-completion-checklist.md`
+- `notebooks/matching_demo.ipynb`
+- `data/level2_summary.csv`
+- `data/level2_summary.md`
 
 ## Next Build Steps
 1. Add provider-specific response mappers for selected paid data vendors.
