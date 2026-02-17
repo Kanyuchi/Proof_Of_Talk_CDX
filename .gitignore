@@ -5,3 +5,5 @@ data/matchmaking.db
 .venv/
 .venv312/
 data/runtime_profiles.json
+.env
+.env.local
