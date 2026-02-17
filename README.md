@@ -25,6 +25,7 @@ Build a premium matchmaking product for Proof of Talk 2026 that:
 ```bash
 pip install -r requirements.txt
 ```
+If pip install is blocked in your environment, `python3 app/server.py` falls back to a stdlib server without `/docs`.
 2. Generate match output:
 ```bash
 python3 scripts/generate_matches.py
@@ -39,6 +40,7 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000
 ```
 4. Open:
 `http://127.0.0.1:8000`
+FastAPI docs (when dependencies are installed): `http://127.0.0.1:8000/docs`
 
 ## API Endpoints
 - `GET /health`
@@ -64,6 +66,12 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000
   "notes": "Strong RWA custody alignment; prioritize for Day 1."
 }
 ```
+
+## Optional Runtime Flags
+- `ENABLE_LIVE_ENRICHMENT=1`: run live connectors (company website + structured funding signals) with graceful fallback on fetch failures.
+- `ENABLE_LLM_RATIONALE=1`: enable LLM-generated explanations.
+- `OPENAI_API_KEY=<key>`: required when `ENABLE_LLM_RATIONALE=1`.
+- `OPENAI_MODEL=gpt-4.1-mini`: optional LLM model override.
 
 ## Next Build Steps
 1. Replace mock enrichment with live connectors/APIs where available.

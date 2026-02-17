@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import os
 from typing import Any, Dict
 
+from app.connectors import run_live_connectors
 
 KEYWORD_ENRICHMENT = {
     "custody": ["institutional custody", "regulated operations", "asset security"],
@@ -36,14 +38,29 @@ def enrich_profile(profile: Dict[str, Any]) -> Dict[str, Any]:
 
     inferred_tags = sorted(set(inferred_tags))
 
+    live_enabled = os.getenv("ENABLE_LIVE_ENRICHMENT", "0") == "1"
+    live_result = run_live_connectors(profile) if live_enabled else {
+        "tags": [],
+        "confidence_delta": 0.0,
+        "sources": [],
+        "errors": [],
+    }
+
+    merged_tags = sorted(set(inferred_tags + live_result["tags"]))
+    base_confidence = 0.68 if inferred_tags else 0.52
+    confidence = min(base_confidence + live_result["confidence_delta"], 0.95)
+
     profile_copy = dict(profile)
     profile_copy["enrichment"] = {
-        "inferred_tags": inferred_tags,
-        "source_confidence": 0.68 if inferred_tags else 0.52,
+        "inferred_tags": merged_tags,
+        "source_confidence": round(confidence, 3),
         "sources": [
             "registration_form",
             "company_website_mock",
             "market_data_mock",
+            *live_result["sources"],
         ],
+        "live_connectors_enabled": live_enabled,
+        "live_connector_errors": live_result["errors"],
     }
     return profile_copy

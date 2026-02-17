@@ -4,6 +4,8 @@ import itertools
 from dataclasses import dataclass
 from typing import Any, Dict, List, Tuple
 
+from app.explanations import generate_match_rationale
+
 
 @dataclass
 class MatchScore:
@@ -107,22 +109,7 @@ def _complementarity(a: Dict[str, Any], b: Dict[str, Any]) -> float:
 
 
 def _rationale(a: Dict[str, Any], b: Dict[str, Any], fit: float, comp: float, ready: float) -> str:
-    reasons: List[str] = []
-    if fit >= 0.2:
-        reasons.append("strong thesis overlap")
-    if comp >= 0.85:
-        reasons.append("high strategic complementarity")
-    if ready >= 0.75:
-        reasons.append("both sides show near-term execution readiness")
-
-    if not reasons:
-        reasons.append("adjacent priorities with potential non-obvious collaboration")
-
-    return (
-        f"{a['name']} ↔ {b['name']}: "
-        + ", ".join(reasons)
-        + ". Recommended for a high-value intro based on product-investor-regulatory fit."
-    )
+    return generate_match_rationale(a, b, fit, comp, ready)
 
 
 def rank_for_profile(source: Dict[str, Any], targets: List[Dict[str, Any]]) -> List[MatchScore]:

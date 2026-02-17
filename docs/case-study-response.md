@@ -5,7 +5,7 @@ Proof of Talk should provide concierge-level matchmaking that behaves like an in
 
 ## 2. Architecture & Data Intelligence
 - Ingestion: registration form + structured profile.
-- Enrichment: company/funding/social/context signals (currently mocked in code for reliable demo execution).
+- Enrichment: company/funding/context signals via connector pipeline with graceful fallback when live sources are unavailable.
 - Intelligence: normalized profile tags + weighted scoring.
 - Output: ranked matches with rationale and confidence.
 - Surface: organizer dashboard with top pairs and per-attendee recommendations.
@@ -19,6 +19,7 @@ Scoring uses a weighted model:
 - `final_score = 0.4*fit + 0.35*complementarity + 0.25*readiness`
 
 Each match includes an explanation string and confidence value for human review.
+Explanation generation uses an LLM when enabled (`ENABLE_LLM_RATIONALE=1` with API key), with deterministic fallback templates for reliability.
 
 ## 4. Test Profiles and Recommended Matches
 Top recommendations from current engine:
