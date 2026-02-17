@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Proof of Talk Matchmaking Dashboard</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Proof of Talk 2026</p>
+        <h1>AI Matchmaking Organizer Dashboard</h1>
+        <p class="sub">
+          Prioritize the highest-value intros across investors, builders, and regulators.
+        </p>
+      </div>
+      <button id="refreshBtn">Refresh Data</button>
+    </header>
+
+    <main class="grid">
+      <section class="card" id="overviewCard">
+        <h2>Overview</h2>
+        <div class="stats" id="overviewStats"></div>
+      </section>
+
+      <section class="card">
+        <h2>Top Intro Pairs</h2>
+        <div id="topPairs"></div>
+      </section>
+
+      <section class="card full">
+        <div class="card-header">
+          <h2>Per-Profile Recommendations</h2>
+          <select id="profileSelect"></select>
+        </div>
+        <div id="profileMatches"></div>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>

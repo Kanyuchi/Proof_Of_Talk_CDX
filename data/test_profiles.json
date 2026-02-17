@@ -1,0 +1,69 @@
+[
+  {
+    "id": "p1",
+    "name": "Amara Okafor",
+    "title": "Director of Digital Assets",
+    "organization": "Abu Dhabi Sovereign Wealth Fund",
+    "mandate": "Deploy $200M into tokenized real-world assets and blockchain infrastructure over 18 months.",
+    "focus": [
+      "regulated custody solutions",
+      "institutional DeFi protocols"
+    ],
+    "looking_for": [
+      "startups with regulatory clarity",
+      "audited smart contracts",
+      "institutional partnerships",
+      "co-investment opportunities with sovereign and pension funds"
+    ]
+  },
+  {
+    "id": "p2",
+    "name": "Marcus Chen",
+    "title": "CEO & Co-Founder",
+    "organization": "VaultBridge",
+    "stage": "Series B",
+    "capital_raised": "$40M",
+    "product": "Institutional custody and settlement infrastructure for tokenized securities. Live with 3 European banks and 2 asset managers.",
+    "looking_for": [
+      "strategic investors",
+      "partnerships with exchanges and custodians",
+      "introductions to Middle Eastern sovereign wealth funds"
+    ]
+  },
+  {
+    "id": "p3",
+    "name": "Dr. Elena Vasquez",
+    "title": "General Partner",
+    "organization": "Meridian Crypto Ventures",
+    "aum": "$500M",
+    "thesis": "Infrastructure plays at the intersection of TradFi and DeFi. Looking for Series A-B companies with institutional traction.",
+    "looking_for": [
+      "deal flow matching thesis",
+      "co-investors for larger rounds",
+      "portfolio introductions to strategic partners"
+    ]
+  },
+  {
+    "id": "p4",
+    "name": "James Whitfield",
+    "title": "CTO",
+    "organization": "NexaLayer",
+    "product": "Enterprise-grade L2 with built-in compliance modules for regulated financial institutions requiring throughput with KYC/AML.",
+    "looking_for": [
+      "banks and asset managers willing to pilot",
+      "infrastructure partnerships for cross-chain settlement"
+    ]
+  },
+  {
+    "id": "p5",
+    "name": "Sophie Bergmann",
+    "title": "Head of Digital Assets Innovation",
+    "organization": "Deutsche Bundesbank",
+    "focus": "CBDC infrastructure and regulatory frameworks for tokenized securities under MiCA.",
+    "looking_for": [
+      "compliance-first technology providers",
+      "academic collaborators",
+      "private sector partners for regulatory sandbox participation"
+    ]
+  }
+]

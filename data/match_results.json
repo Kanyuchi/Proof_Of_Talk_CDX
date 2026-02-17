@@ -1,0 +1,316 @@
+{
+  "matches": {
+    "p1": [
+      {
+        "target_id": "p2",
+        "target_name": "Marcus Chen",
+        "priority_rank": 1,
+        "score": 0.6354,
+        "fit_score": 0.1667,
+        "complementarity_score": 1.0,
+        "readiness_score": 0.875,
+        "confidence": 0.6958,
+        "rationale": "Amara Okafor \u2194 Marcus Chen: high strategic complementarity, both sides show near-term execution readiness. Recommended for a high-value intro based on product-investor-regulatory fit."
+      },
+      {
+        "target_id": "p4",
+        "target_name": "James Whitfield",
+        "priority_rank": 2,
+        "score": 0.5198,
+        "fit_score": 0.0652,
+        "complementarity_score": 1.0,
+        "readiness_score": 0.575,
+        "confidence": 0.6303,
+        "rationale": "Amara Okafor \u2194 James Whitfield: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
+      },
+      {
+        "target_id": "p3",
+        "target_name": "Dr. Elena Vasquez",
+        "priority_rank": 3,
+        "score": 0.4204,
+        "fit_score": 0.0667,
+        "complementarity_score": 0.5,
+        "readiness_score": 0.875,
+        "confidence": 0.6608,
+        "rationale": "Amara Okafor \u2194 Dr. Elena Vasquez: both sides show near-term execution readiness. Recommended for a high-value intro based on product-investor-regulatory fit."
+      },
+      {
+        "target_id": "p5",
+        "target_name": "Sophie Bergmann",
+        "priority_rank": 4,
+        "score": 0.4098,
+        "fit_score": 0.0714,
+        "complementarity_score": 0.75,
+        "readiness_score": 0.475,
+        "confidence": 0.6225,
+        "rationale": "Amara Okafor \u2194 Sophie Bergmann: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
+      }
+    ],
+    "p2": [
+      {
+        "target_id": "p3",
+        "target_name": "Dr. Elena Vasquez",
+        "priority_rank": 1,
+        "score": 0.6526,
+        "fit_score": 0.1316,
+        "complementarity_score": 1.0,
+        "readiness_score": 1.0,
+        "confidence": 0.6961,
+        "rationale": "Marcus Chen \u2194 Dr. Elena Vasquez: high strategic complementarity, both sides show near-term execution readiness. Recommended for a high-value intro based on product-investor-regulatory fit."
+      },
+      {
+        "target_id": "p1",
+        "target_name": "Amara Okafor",
+        "priority_rank": 2,
+        "score": 0.6354,
+        "fit_score": 0.1667,
+        "complementarity_score": 1.0,
+        "readiness_score": 0.875,
+        "confidence": 0.6958,
+        "rationale": "Marcus Chen \u2194 Amara Okafor: high strategic complementarity, both sides show near-term execution readiness. Recommended for a high-value intro based on product-investor-regulatory fit."
+      },
+      {
+        "target_id": "p5",
+        "target_name": "Sophie Bergmann",
+        "priority_rank": 3,
+        "score": 0.4974,
+        "fit_score": 0.0811,
+        "complementarity_score": 0.9,
+        "readiness_score": 0.6,
+        "confidence": 0.6384,
+        "rationale": "Marcus Chen \u2194 Sophie Bergmann: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
+      },
+      {
+        "target_id": "p4",
+        "target_name": "James Whitfield",
+        "priority_rank": 4,
+        "score": 0.4482,
+        "fit_score": 0.1579,
+        "complementarity_score": 0.6,
+        "readiness_score": 0.7,
+        "confidence": 0.6753,
+        "rationale": "Marcus Chen \u2194 James Whitfield: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
+      }
+    ],
+    "p3": [
+      {
+        "target_id": "p2",
+        "target_name": "Marcus Chen",
+        "priority_rank": 1,
+        "score": 0.6526,
+        "fit_score": 0.1316,
+        "complementarity_score": 1.0,
+        "readiness_score": 1.0,
+        "confidence": 0.6961,
+        "rationale": "Dr. Elena Vasquez \u2194 Marcus Chen: high strategic complementarity, both sides show near-term execution readiness. Recommended for a high-value intro based on product-investor-regulatory fit."
+      },
+      {
+        "target_id": "p4",
+        "target_name": "James Whitfield",
+        "priority_rank": 2,
+        "score": 0.5345,
+        "fit_score": 0.0238,
+        "complementarity_score": 1.0,
+        "readiness_score": 0.7,
+        "confidence": 0.6283,
+        "rationale": "Dr. Elena Vasquez \u2194 James Whitfield: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
+      },
+      {
+        "target_id": "p5",
+        "target_name": "Sophie Bergmann",
+        "priority_rank": 3,
+        "score": 0.4341,
+        "fit_score": 0.0541,
+        "complementarity_score": 0.75,
+        "readiness_score": 0.6,
+        "confidence": 0.6289,
+        "rationale": "Dr. Elena Vasquez \u2194 Sophie Bergmann: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
+      },
+      {
+        "target_id": "p1",
+        "target_name": "Amara Okafor",
+        "priority_rank": 4,
+        "score": 0.4204,
+        "fit_score": 0.0667,
+        "complementarity_score": 0.5,
+        "readiness_score": 0.875,
+        "confidence": 0.6608,
+        "rationale": "Dr. Elena Vasquez \u2194 Amara Okafor: both sides show near-term execution readiness. Recommended for a high-value intro based on product-investor-regulatory fit."
+      }
+    ],
+    "p4": [
+      {
+        "target_id": "p3",
+        "target_name": "Dr. Elena Vasquez",
+        "priority_rank": 1,
+        "score": 0.5345,
+        "fit_score": 0.0238,
+        "complementarity_score": 1.0,
+        "readiness_score": 0.7,
+        "confidence": 0.6283,
+        "rationale": "James Whitfield \u2194 Dr. Elena Vasquez: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
+      },
+      {
+        "target_id": "p1",
+        "target_name": "Amara Okafor",
+        "priority_rank": 2,
+        "score": 0.5198,
+        "fit_score": 0.0652,
+        "complementarity_score": 1.0,
+        "readiness_score": 0.575,
+        "confidence": 0.6303,
+        "rationale": "James Whitfield \u2194 Amara Okafor: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
+      },
+      {
+        "target_id": "p2",
+        "target_name": "Marcus Chen",
+        "priority_rank": 3,
+        "score": 0.4482,
+        "fit_score": 0.1579,
+        "complementarity_score": 0.6,
+        "readiness_score": 0.7,
+        "confidence": 0.6753,
+        "rationale": "James Whitfield \u2194 Marcus Chen: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
+      },
+      {
+        "target_id": "p5",
+        "target_name": "Sophie Bergmann",
+        "priority_rank": 4,
+        "score": 0.4111,
+        "fit_score": 0.0526,
+        "complementarity_score": 0.9,
+        "readiness_score": 0.3,
+        "confidence": 0.5984,
+        "rationale": "James Whitfield \u2194 Sophie Bergmann: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
+      }
+    ],
+    "p5": [
+      {
+        "target_id": "p2",
+        "target_name": "Marcus Chen",
+        "priority_rank": 1,
+        "score": 0.4974,
+        "fit_score": 0.0811,
+        "complementarity_score": 0.9,
+        "readiness_score": 0.6,
+        "confidence": 0.6384,
+        "rationale": "Sophie Bergmann \u2194 Marcus Chen: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
+      },
+      {
+        "target_id": "p3",
+        "target_name": "Dr. Elena Vasquez",
+        "priority_rank": 2,
+        "score": 0.4341,
+        "fit_score": 0.0541,
+        "complementarity_score": 0.75,
+        "readiness_score": 0.6,
+        "confidence": 0.6289,
+        "rationale": "Sophie Bergmann \u2194 Dr. Elena Vasquez: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
+      },
+      {
+        "target_id": "p4",
+        "target_name": "James Whitfield",
+        "priority_rank": 3,
+        "score": 0.4111,
+        "fit_score": 0.0526,
+        "complementarity_score": 0.9,
+        "readiness_score": 0.3,
+        "confidence": 0.5984,
+        "rationale": "Sophie Bergmann \u2194 James Whitfield: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
+      },
+      {
+        "target_id": "p1",
+        "target_name": "Amara Okafor",
+        "priority_rank": 4,
+        "score": 0.4098,
+        "fit_score": 0.0714,
+        "complementarity_score": 0.75,
+        "readiness_score": 0.475,
+        "confidence": 0.6225,
+        "rationale": "Sophie Bergmann \u2194 Amara Okafor: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
+      }
+    ]
+  },
+  "top_intro_pairs": [
+    {
+      "from_id": "p2",
+      "from_name": "Marcus Chen",
+      "to_id": "p3",
+      "to_name": "Dr. Elena Vasquez",
+      "score": 0.6526,
+      "rationale": "Marcus Chen \u2194 Dr. Elena Vasquez: high strategic complementarity, both sides show near-term execution readiness. Recommended for a high-value intro based on product-investor-regulatory fit."
+    },
+    {
+      "from_id": "p1",
+      "from_name": "Amara Okafor",
+      "to_id": "p2",
+      "to_name": "Marcus Chen",
+      "score": 0.6354,
+      "rationale": "Amara Okafor \u2194 Marcus Chen: high strategic complementarity, both sides show near-term execution readiness. Recommended for a high-value intro based on product-investor-regulatory fit."
+    },
+    {
+      "from_id": "p3",
+      "from_name": "Dr. Elena Vasquez",
+      "to_id": "p4",
+      "to_name": "James Whitfield",
+      "score": 0.5345,
+      "rationale": "Dr. Elena Vasquez \u2194 James Whitfield: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
+    },
+    {
+      "from_id": "p1",
+      "from_name": "Amara Okafor",
+      "to_id": "p4",
+      "to_name": "James Whitfield",
+      "score": 0.5198,
+      "rationale": "Amara Okafor \u2194 James Whitfield: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
+    },
+    {
+      "from_id": "p2",
+      "from_name": "Marcus Chen",
+      "to_id": "p5",
+      "to_name": "Sophie Bergmann",
+      "score": 0.4974,
+      "rationale": "Marcus Chen \u2194 Sophie Bergmann: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
+    },
+    {
+      "from_id": "p2",
+      "from_name": "Marcus Chen",
+      "to_id": "p4",
+      "to_name": "James Whitfield",
+      "score": 0.4482,
+      "rationale": "Marcus Chen \u2194 James Whitfield: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
+    },
+    {
+      "from_id": "p3",
+      "from_name": "Dr. Elena Vasquez",
+      "to_id": "p5",
+      "to_name": "Sophie Bergmann",
+      "score": 0.4341,
+      "rationale": "Dr. Elena Vasquez \u2194 Sophie Bergmann: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
+    },
+    {
+      "from_id": "p1",
+      "from_name": "Amara Okafor",
+      "to_id": "p3",
+      "to_name": "Dr. Elena Vasquez",
+      "score": 0.4204,
+      "rationale": "Amara Okafor \u2194 Dr. Elena Vasquez: both sides show near-term execution readiness. Recommended for a high-value intro based on product-investor-regulatory fit."
+    },
+    {
+      "from_id": "p4",
+      "from_name": "James Whitfield",
+      "to_id": "p5",
+      "to_name": "Sophie Bergmann",
+      "score": 0.4111,
+      "rationale": "James Whitfield \u2194 Sophie Bergmann: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
+    },
+    {
+      "from_id": "p1",
+      "from_name": "Amara Okafor",
+      "to_id": "p5",
+      "to_name": "Sophie Bergmann",
+      "score": 0.4098,
+      "rationale": "Amara Okafor \u2194 Sophie Bergmann: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
+    }
+  ]
+}
