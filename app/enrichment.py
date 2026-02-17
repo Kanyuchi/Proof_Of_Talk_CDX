@@ -62,5 +62,6 @@ def enrich_profile(profile: Dict[str, Any]) -> Dict[str, Any]:
         ],
         "live_connectors_enabled": live_enabled,
         "live_connector_errors": live_result["errors"],
+        "live_connector_results": live_result.get("connector_results", []),
     }
     return profile_copy

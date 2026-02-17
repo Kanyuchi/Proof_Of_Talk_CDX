@@ -5,7 +5,7 @@ Proof of Talk should provide concierge-level matchmaking that behaves like an in
 
 ## 2. Architecture & Data Intelligence
 - Ingestion: registration form + structured profile.
-- Enrichment: company/funding/context signals via connector pipeline with graceful fallback when live sources are unavailable.
+- Enrichment: connector registry (`website`, `structured_funding`, `clearbit`, `crunchbase`, `openalex`) with environment-driven enablement and graceful fallback.
 - Intelligence: normalized profile tags + weighted scoring.
 - Output: ranked matches with rationale and confidence.
 - Surface: organizer dashboard with top pairs and per-attendee recommendations.

@@ -69,12 +69,22 @@ FastAPI docs (when dependencies are installed): `http://127.0.0.1:8000/docs`
 
 ## Optional Runtime Flags
 - `ENABLE_LIVE_ENRICHMENT=1`: run live connectors (company website + structured funding signals) with graceful fallback on fetch failures.
+- `LIVE_CONNECTORS=website,structured_funding,clearbit,crunchbase,openalex`: choose which connectors run when live enrichment is enabled.
+- `CLEARBIT_API_KEY=<key>`: enables Clearbit company signal connector.
+- `CLEARBIT_COMPANY_URL=<url_template>`: optional override (must include `{domain}`).
+- `CRUNCHBASE_API_KEY=<key>`: enables Crunchbase organization signal connector.
+- `CRUNCHBASE_BASE_URL=<base_url>`: optional Crunchbase API base URL override.
 - `ENABLE_LLM_RATIONALE=1`: enable LLM-generated explanations.
 - `OPENAI_API_KEY=<key>`: required when `ENABLE_LLM_RATIONALE=1`.
 - `OPENAI_MODEL=gpt-4.1-mini`: optional LLM model override.
 
+## Testing
+```bash
+python3 -m unittest discover -s tests -v
+```
+
 ## Next Build Steps
-1. Replace mock enrichment with live connectors/APIs where available.
-2. Add LLM-generated rationales with fallback templates.
-3. Add scheduling workflow and CRM/event tool exports.
-4. Add auth and multi-event dataset support.
+1. Add provider-specific response mappers for selected paid data vendors.
+2. Add scheduling workflow and CRM/event tool exports.
+3. Add auth and multi-event dataset support.
+4. Add ranking calibration from intro outcome feedback.
