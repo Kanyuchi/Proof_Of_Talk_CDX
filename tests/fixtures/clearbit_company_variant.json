@@ -1,0 +1,12 @@
+{
+  "company": {
+    "category": {
+      "sector": "Financial Services",
+      "industry": "Investment Banking",
+      "subIndustry": "Digital Asset Infrastructure"
+    },
+    "metrics": {
+      "employees": 1800
+    }
+  }
+}

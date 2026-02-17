@@ -1,0 +1,13 @@
+{
+  "properties": {
+    "funding_stage": "Series C",
+    "funding_total": "95000000"
+  },
+  "cards": {
+    "raised_investments": {
+      "items": [
+        {"identifier": {"value": "Series B"}}
+      ]
+    }
+  }
+}

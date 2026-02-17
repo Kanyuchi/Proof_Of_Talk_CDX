@@ -1,0 +1,11 @@
+{
+  "results": [
+    {
+      "works_count": 2200,
+      "concepts": [
+        {"display_name": "Cryptography"},
+        {"display_name": "Distributed Systems"}
+      ]
+    }
+  ]
+}

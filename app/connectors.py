@@ -82,7 +82,8 @@ def infer_company_website(profile: Dict[str, Any]) -> Optional[str]:
 
 def parse_clearbit_payload(payload: Dict[str, Any]) -> List[str]:
     tags: List[str] = []
-    category = payload.get("category") or {}
+    root = payload.get("company") if isinstance(payload.get("company"), dict) else payload
+    category = root.get("category") or {}
     sector = str(category.get("sector", "")).strip().lower()
     industry = str(category.get("industry", "")).strip().lower()
     sub_industry = str(category.get("subIndustry", "")).strip().lower()
@@ -90,7 +91,7 @@ def parse_clearbit_payload(payload: Dict[str, Any]) -> List[str]:
         if value:
             tags.append(f"industry:{value}")
 
-    metrics = payload.get("metrics") or {}
+    metrics = root.get("metrics") or {}
     employees = metrics.get("employees")
     if isinstance(employees, int):
         if employees >= 1000:
@@ -106,15 +107,18 @@ def parse_clearbit_payload(payload: Dict[str, Any]) -> List[str]:
 def parse_crunchbase_payload(payload: Dict[str, Any]) -> List[str]:
     tags: List[str] = []
     if isinstance(payload, dict):
-        stage = str(payload.get("funding_stage", "")).strip().lower()
+        root = payload.get("properties") if isinstance(payload.get("properties"), dict) else payload
+        stage = str(root.get("funding_stage", "")).strip().lower()
         if stage:
             tags.append(f"funding_stage:{stage}")
-        total_funding = str(payload.get("total_funding_usd", "")).strip()
+        total_funding = str(root.get("total_funding_usd", "") or root.get("funding_total", "")).strip()
         if total_funding:
             tags.append("venture_backed")
 
         cards = payload.get("cards") or {}
         raised = cards.get("raised_investments") or []
+        if isinstance(raised, dict):
+            raised = raised.get("items") or raised.get("edges") or []
         if isinstance(raised, list) and raised:
             tags.append("active_funding_history")
 
@@ -135,9 +139,11 @@ def parse_openalex_payload(payload: Dict[str, Any]) -> List[str]:
         elif works_count >= 1000:
             tags.append("research_intensity:medium")
 
-    concepts = top.get("x_concepts") or []
+    concepts = top.get("x_concepts") or top.get("concepts") or []
     if isinstance(concepts, list):
         for concept in concepts[:3]:
+            if not isinstance(concept, dict):
+                continue
             name = str(concept.get("display_name", "")).strip().lower()
             if name:
                 tags.append(f"research_topic:{name}")

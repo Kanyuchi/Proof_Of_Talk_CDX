@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import os
 import unittest
+from pathlib import Path
+import json
 
 from app.connectors import (
     infer_company_website,
@@ -69,6 +71,25 @@ class ConnectorsTest(unittest.TestCase):
         tags = parse_openalex_payload(payload)
         self.assertIn("research_intensity:high", tags)
         self.assertIn("research_topic:blockchain", tags)
+
+    def test_parse_clearbit_payload_variant_wrapper(self) -> None:
+        payload = json.loads(Path("tests/fixtures/clearbit_company_variant.json").read_text())
+        tags = parse_clearbit_payload(payload)
+        self.assertIn("industry:financial services", tags)
+        self.assertIn("company_size:enterprise", tags)
+
+    def test_parse_crunchbase_payload_variant_properties(self) -> None:
+        payload = json.loads(Path("tests/fixtures/crunchbase_org_variant.json").read_text())
+        tags = parse_crunchbase_payload(payload)
+        self.assertIn("funding_stage:series c", tags)
+        self.assertIn("venture_backed", tags)
+        self.assertIn("active_funding_history", tags)
+
+    def test_parse_openalex_payload_variant_concepts(self) -> None:
+        payload = json.loads(Path("tests/fixtures/openalex_institution_variant.json").read_text())
+        tags = parse_openalex_payload(payload)
+        self.assertIn("research_intensity:medium", tags)
+        self.assertIn("research_topic:cryptography", tags)
 
     def test_run_live_connectors_with_missing_keys(self) -> None:
         os.environ["LIVE_CONNECTORS"] = "clearbit,crunchbase,structured_funding"
