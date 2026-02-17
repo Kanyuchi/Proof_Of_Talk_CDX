@@ -14,6 +14,7 @@
 - [x] Organizer notes persist in SQLite (`data/matchmaking.db`)
 - [x] Top-pair and per-profile views are visible in browser
 - [x] Runtime profile ingestion/reset endpoints support demo scenarios
+- [x] Database layer supports SQLite, PostgreSQL, and MySQL via `DATABASE_URL`
 
 ## Packaging
 - [ ] Record 3-5 minute demo walkthrough video

@@ -6,7 +6,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 
-from app.db import action_map, get_all_actions, init_db, upsert_action
+from app.db import action_map, backend_summary, get_all_actions, init_db, upsert_action
 from app.enrichment import enrich_profile
 from app.matching import generate_all_matches, top_intro_pairs, top_non_obvious_pairs
 
@@ -122,7 +122,7 @@ class MatchmakingHandler(BaseHTTPRequestHandler):
             )
             return
         if parsed.path == "/health":
-            self._json({"status": "ok", "mode": "fallback"})
+            self._json({"status": "ok", "mode": "fallback", "db_backend": backend_summary()["backend"]})
             return
         if parsed.path == "/api/profiles":
             self._json({"profiles": _load_profiles(), "source": _active_profiles_path().name})

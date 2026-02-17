@@ -11,7 +11,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-from app.db import action_map, get_all_actions, init_db, upsert_action
+from app.db import action_map, backend_summary, get_all_actions, init_db, upsert_action
 from app.enrichment import enrich_profile
 from app.matching import generate_all_matches, top_intro_pairs, top_non_obvious_pairs
 
@@ -127,7 +127,7 @@ def root() -> FileResponse:
 
 @app.get("/health")
 def health() -> Dict[str, str]:
-    return {"status": "ok"}
+    return {"status": "ok", "db_backend": backend_summary()["backend"]}
 
 
 @app.get("/api/profiles")

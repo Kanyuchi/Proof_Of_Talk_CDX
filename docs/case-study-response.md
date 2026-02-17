@@ -10,7 +10,7 @@ Proof of Talk should provide concierge-level matchmaking that behaves like an in
 - Output: ranked matches with rationale and confidence.
 - Output: ranked matches with rationale, confidence, and risk labels.
 - Surface: organizer dashboard with top pairs, non-obvious high-value pairs, and per-attendee recommendations.
-- Control plane: organizer decisioning (`approved/rejected/pending`) plus intro notes persisted in SQLite.
+- Control plane: organizer decisioning (`approved/rejected/pending`) plus intro notes persisted in database layer supporting SQLite/PostgreSQL/MySQL (`DATABASE_URL`).
 
 ## 3. Matching Logic & Explanations
 Scoring uses a weighted model:
@@ -86,6 +86,7 @@ Non-obvious but high-value example:
 - `app/db.py` persists organizer actions in SQLite (`data/matchmaking.db`).
 - Runtime profile ingestion is supported via `/api/profiles/ingest` with reset via `/api/profiles/reset`.
 - `scripts/validate_level3.py` verifies risk metadata and non-obvious output coverage.
+- Database layer is AWS-ready for RDS PostgreSQL/MySQL with local SQLite fallback (`app/db.py`, `scripts/check_db_connection.py`).
 
 ## 7. Commercialization & Scale Path
 - Tiered monetization:

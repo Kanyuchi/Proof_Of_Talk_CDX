@@ -14,7 +14,7 @@ Build a premium matchmaking product for Proof of Talk 2026 that:
 - `app/server.py`: compatibility launcher for FastAPI (`python3 app/server.py`)
 - `app/matching.py`: weighted matching logic + risk indicators + non-obvious match detection
 - `app/enrichment.py`: mock enrichment layer for profile signal expansion
-- `app/db.py`: SQLite persistence for organizer actions and notes
+- `app/db.py`: multi-database persistence layer (`SQLite`, `PostgreSQL`, `MySQL`) via `DATABASE_URL`
 - `app/static/*`: organizer dashboard (overview, top intro pairs, non-obvious matches, per-profile actions)
 - `scripts/generate_matches.py`: offline match generation
 - `data/test_profiles.json`: 5 required case-study personas
@@ -71,6 +71,10 @@ FastAPI docs (when dependencies are installed): `http://127.0.0.1:8000/docs`
 ```
 
 ## Optional Runtime Flags
+- `DATABASE_URL=<url>`: database connection string.
+  - Local default: `sqlite:///data/matchmaking.db`
+  - PostgreSQL example: `postgresql://user:pass@host:5432/matchmaking?sslmode=require`
+  - MySQL example: `mysql://user:pass@host:3306/matchmaking?ssl=true`
 - `ENABLE_LIVE_ENRICHMENT=1`: run live connectors (company website + structured funding signals) with graceful fallback on fetch failures.
 - `LIVE_CONNECTORS=website,structured_funding,clearbit,crunchbase,openalex`: choose which connectors run when live enrichment is enabled.
 - `CLEARBIT_API_KEY=<key>`: enables Clearbit company signal connector.
@@ -84,6 +88,28 @@ FastAPI docs (when dependencies are installed): `http://127.0.0.1:8000/docs`
 ## Testing
 ```bash
 python3 -m unittest discover -s tests -v
+```
+
+## AWS RDS Setup (Level 3)
+Recommended: PostgreSQL on RDS.
+
+1. Create an RDS instance (PostgreSQL or MySQL) and allow inbound access from your app host/security group.
+2. Create database and user (example: `matchmaking`).
+3. Set environment variable before starting app:
+```bash
+export DATABASE_URL="postgresql://USER:PASSWORD@RDS_ENDPOINT:5432/matchmaking?sslmode=require"
+```
+or
+```bash
+export DATABASE_URL="mysql://USER:PASSWORD@RDS_ENDPOINT:3306/matchmaking?ssl=true"
+```
+4. Validate connection and schema bootstrap:
+```bash
+python3 scripts/check_db_connection.py
+```
+5. Start app:
+```bash
+python3 app/server.py
 ```
 
 ## Level 3 Runbook
