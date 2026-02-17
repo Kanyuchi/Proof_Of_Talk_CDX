@@ -9,7 +9,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from app.enrichment import enrich_profile
-from app.matching import generate_all_matches, top_intro_pairs
+from app.matching import generate_all_matches, top_intro_pairs, top_non_obvious_pairs
 
 DATA_PATH = ROOT / "data" / "test_profiles.json"
 OUT_PATH = ROOT / "data" / "match_results.json"
@@ -22,6 +22,7 @@ def main() -> None:
     out = {
         "matches": generate_all_matches(enriched),
         "top_intro_pairs": top_intro_pairs(enriched, limit=10),
+        "top_non_obvious_pairs": top_non_obvious_pairs(enriched, limit=5),
     }
 
     OUT_PATH.write_text(json.dumps(out, indent=2), encoding="utf-8")

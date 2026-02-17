@@ -13,11 +13,12 @@ from pydantic import BaseModel, Field
 
 from app.db import action_map, get_all_actions, init_db, upsert_action
 from app.enrichment import enrich_profile
-from app.matching import generate_all_matches, top_intro_pairs
+from app.matching import generate_all_matches, top_intro_pairs, top_non_obvious_pairs
 
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = ROOT / "data" / "test_profiles.json"
+INGESTED_DATA_PATH = ROOT / "data" / "runtime_profiles.json"
 STATIC_DIR = ROOT / "app" / "static"
 
 
@@ -28,10 +29,15 @@ class ActionUpsert(BaseModel):
     notes: str = Field(default="")
 
 
+class ProfileIngestRequest(BaseModel):
+    profiles: List[Dict[str, Any]]
+    overwrite: bool = True
+
+
 app = FastAPI(
     title="Proof of Talk Matchmaking API",
     description="AI matchmaking, explainability, and organizer control plane for Proof of Talk 2026.",
-    version="0.2.0",
+    version="0.3.0",
 )
 
 app.add_middleware(
@@ -50,10 +56,45 @@ def on_startup() -> None:
     init_db()
 
 
+def _active_profiles_path() -> Path:
+    return INGESTED_DATA_PATH if INGESTED_DATA_PATH.exists() else DATA_PATH
+
+
+def _read_raw_profiles() -> List[Dict[str, Any]]:
+    path = _active_profiles_path()
+    with open(path, "r", encoding="utf-8") as f:
+        loaded = json.load(f)
+    if not isinstance(loaded, list):
+        raise ValueError("profiles source must be a JSON array")
+    return loaded
+
+
+def _validate_profile_minimum(profile: Dict[str, Any]) -> None:
+    if not profile.get("id"):
+        raise ValueError("profile missing id")
+    if not profile.get("name"):
+        raise ValueError("profile missing name")
+
+
+def _write_profiles(profiles: List[Dict[str, Any]], overwrite: bool) -> int:
+    for p in profiles:
+        _validate_profile_minimum(p)
+
+    if not overwrite and INGESTED_DATA_PATH.exists():
+        existing = json.loads(INGESTED_DATA_PATH.read_text(encoding="utf-8"))
+        by_id = {str(x["id"]): x for x in existing if isinstance(x, dict) and x.get("id")}
+        for p in profiles:
+            by_id[str(p["id"])] = p
+        merged = list(by_id.values())
+        INGESTED_DATA_PATH.write_text(json.dumps(merged, indent=2), encoding="utf-8")
+        return len(merged)
+
+    INGESTED_DATA_PATH.write_text(json.dumps(profiles, indent=2), encoding="utf-8")
+    return len(profiles)
+
+
 def load_profiles() -> List[Dict[str, Any]]:
-    with open(DATA_PATH, "r", encoding="utf-8") as f:
-        profiles = json.load(f)
-    return [enrich_profile(p) for p in profiles]
+    return [enrich_profile(p) for p in _read_raw_profiles()]
 
 
 def with_actions(per_profile: Dict[str, List[Dict[str, Any]]]) -> Dict[str, List[Dict[str, Any]]]:
@@ -90,8 +131,27 @@ def health() -> Dict[str, str]:
 
 
 @app.get("/api/profiles")
-def profiles() -> Dict[str, List[Dict[str, Any]]]:
-    return {"profiles": load_profiles()}
+def profiles() -> Dict[str, Any]:
+    path = _active_profiles_path()
+    return {"profiles": load_profiles(), "source": str(path.name)}
+
+
+@app.post("/api/profiles/ingest")
+def ingest_profiles(payload: ProfileIngestRequest) -> Dict[str, Any]:
+    count = _write_profiles(payload.profiles, overwrite=payload.overwrite)
+    return {
+        "status": "ok",
+        "stored_profiles": count,
+        "source": str(INGESTED_DATA_PATH.name),
+        "overwrite": payload.overwrite,
+    }
+
+
+@app.post("/api/profiles/reset")
+def reset_profiles() -> Dict[str, Any]:
+    if INGESTED_DATA_PATH.exists():
+        INGESTED_DATA_PATH.unlink()
+    return {"status": "ok", "source": str(DATA_PATH.name)}
 
 
 @app.get("/api/actions")
@@ -117,15 +177,14 @@ def matches(profile_id: Optional[str] = Query(default=None)) -> Dict[str, Any]:
     return {"matches": per_profile}
 
 
-@app.get("/api/dashboard")
-def dashboard() -> Dict[str, Any]:
+@app.get("/api/non-obvious-matches")
+def non_obvious_matches(limit: int = Query(default=5, ge=1, le=20)) -> Dict[str, Any]:
     profiles_list = load_profiles()
-    per_profile = with_actions(generate_all_matches(profiles_list))
-    pairs = top_intro_pairs(profiles_list, limit=10)
-    action_lookup = action_map()
+    pairs = top_non_obvious_pairs(profiles_list, limit=limit)
+    actions = action_map()
     for row in pairs:
         key = f"{row['from_id']}::{row['to_id']}"
-        row["action"] = action_lookup.get(
+        row["action"] = actions.get(
             key,
             {
                 "from_id": row["from_id"],
@@ -135,12 +194,58 @@ def dashboard() -> Dict[str, Any]:
                 "updated_at": "",
             },
         )
+    return {"non_obvious_pairs": pairs}
+
+
+@app.get("/api/dashboard")
+def dashboard() -> Dict[str, Any]:
+    profiles_list = load_profiles()
+    per_profile = with_actions(generate_all_matches(profiles_list))
+    pairs = top_intro_pairs(profiles_list, limit=10)
+    non_obvious = top_non_obvious_pairs(profiles_list, limit=5)
+    actions = action_map()
+
+    for row in pairs:
+        key = f"{row['from_id']}::{row['to_id']}"
+        row["action"] = actions.get(
+            key,
+            {
+                "from_id": row["from_id"],
+                "to_id": row["to_id"],
+                "status": "pending",
+                "notes": "",
+                "updated_at": "",
+            },
+        )
+
+    for row in non_obvious:
+        key = f"{row['from_id']}::{row['to_id']}"
+        row["action"] = actions.get(
+            key,
+            {
+                "from_id": row["from_id"],
+                "to_id": row["to_id"],
+                "status": "pending",
+                "notes": "",
+                "updated_at": "",
+            },
+        )
+
+    risk_counts = {"low": 0, "medium": 0, "high": 0}
+    for rows in per_profile.values():
+        for m in rows:
+            level = m.get("risk_level", "medium")
+            if level in risk_counts:
+                risk_counts[level] += 1
+
     return {
         "overview": {
             "attendee_count": len(profiles_list),
             "recommended_intro_count": len(pairs),
             "actioned_intro_count": len(get_all_actions()),
+            "risk_distribution": risk_counts,
         },
         "top_intro_pairs": pairs,
+        "top_non_obvious_pairs": non_obvious,
         "per_profile": per_profile,
     }

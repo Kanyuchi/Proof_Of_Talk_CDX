@@ -9,9 +9,11 @@
 
 ## Demo Readiness
 - [x] `GET /api/dashboard` returns ranked intros + explainability
+- [x] `GET /api/non-obvious-matches` returns high-value non-obvious pairs
 - [x] Organizer can set match status (`pending`, `approved`, `rejected`)
 - [x] Organizer notes persist in SQLite (`data/matchmaking.db`)
 - [x] Top-pair and per-profile views are visible in browser
+- [x] Runtime profile ingestion/reset endpoints support demo scenarios
 
 ## Packaging
 - [ ] Record 3-5 minute demo walkthrough video

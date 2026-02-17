@@ -1,5 +1,6 @@
 const overviewStats = document.getElementById("overviewStats");
 const topPairs = document.getElementById("topPairs");
+const nonObviousPairs = document.getElementById("nonObviousPairs");
 const profileSelect = document.getElementById("profileSelect");
 const profileMatches = document.getElementById("profileMatches");
 const refreshBtn = document.getElementById("refreshBtn");
@@ -12,10 +13,14 @@ function stat(label, value) {
 }
 
 function renderOverview(overview) {
+  const risk = overview.risk_distribution || { low: 0, medium: 0, high: 0 };
   overviewStats.innerHTML = [
     stat("Attendees", overview.attendee_count),
     stat("Top Intro Pairs", overview.recommended_intro_count),
     stat("Actioned Intros", overview.actioned_intro_count || 0),
+    stat("Low Risk", risk.low || 0),
+    stat("Medium Risk", risk.medium || 0),
+    stat("High Risk", risk.high || 0),
     stat("Model", "Weighted + Explainable"),
   ].join("");
 }
@@ -25,13 +30,33 @@ function statusBadge(status) {
   return `<span class="badge badge-${safe}">${safe}</span>`;
 }
 
+function riskBadge(riskLevel) {
+  const safe = riskLevel || "medium";
+  return `<span class="badge badge-risk-${safe}">${safe} risk</span>`;
+}
+
 function renderTopPairs(items) {
   topPairs.innerHTML = items
     .map(
       (row, idx) => `
       <article class="item">
         <h3>#${idx + 1}: ${row.from_name} ↔ ${row.to_name}</h3>
-        <p class="meta">Score: ${row.score} | ${statusBadge(row.action?.status)}</p>
+        <p class="meta">Score: ${row.score} | Confidence: ${row.confidence || "-"} | ${riskBadge(row.risk_level)} | ${statusBadge(row.action?.status)}</p>
+        <p>${row.rationale}</p>
+        <p class="meta">${(row.risk_reasons || []).join(", ")}</p>
+      </article>
+    `,
+    )
+    .join("");
+}
+
+function renderNonObvious(items) {
+  nonObviousPairs.innerHTML = items
+    .map(
+      (row, idx) => `
+      <article class="item">
+        <h3>#${idx + 1}: ${row.from_name} ↔ ${row.to_name}</h3>
+        <p class="meta">Score: ${row.score} | Novelty: ${row.novelty_score} | ${riskBadge(row.risk_level)}</p>
         <p>${row.rationale}</p>
       </article>
     `,
@@ -55,7 +80,8 @@ function renderProfileMatches(profileId) {
       <article class="item">
         <h3>Priority ${m.priority_rank}: ${m.target_name}</h3>
         <p class="meta">Score ${m.score} | Fit ${m.fit_score} | Complementarity ${m.complementarity_score} | Readiness ${m.readiness_score} | Confidence ${m.confidence}</p>
-        <p class="meta">Status: ${statusBadge(m.action?.status)}</p>
+        <p class="meta">Risk: ${riskBadge(m.risk_level)} | Status: ${statusBadge(m.action?.status)}</p>
+        <p class="meta">${(m.risk_reasons || []).join(", ")}</p>
         <p>${m.rationale}</p>
         <div class="action-row">
           <select id="status-${profileId}-${m.target_id}">
@@ -113,6 +139,7 @@ async function loadDashboard() {
 
   renderOverview(dashboardData.overview);
   renderTopPairs(dashboardData.top_intro_pairs);
+  renderNonObvious(dashboardData.top_non_obvious_pairs || []);
   renderProfileOptions(dashboardData.per_profile);
 
   if (profileSelect.value) {

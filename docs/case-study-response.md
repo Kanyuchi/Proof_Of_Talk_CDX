@@ -4,11 +4,12 @@
 Proof of Talk should provide concierge-level matchmaking that behaves like an investment-banking intro desk, not a conference attendee directory. The experience begins at registration, enriches each attendee profile before arrival, and delivers prioritized intros with clear reasons and deal-readiness indicators.
 
 ## 2. Architecture & Data Intelligence
-- Ingestion: registration form + structured profile.
+- Ingestion: registration form + structured profile + runtime ingestion API (`/api/profiles/ingest`, `/api/profiles/reset`).
 - Enrichment: connector registry (`website`, `structured_funding`, `clearbit`, `crunchbase`, `openalex`) with environment-driven enablement and graceful fallback.
 - Intelligence: normalized profile tags + weighted scoring.
 - Output: ranked matches with rationale and confidence.
-- Surface: organizer dashboard with top pairs and per-attendee recommendations.
+- Output: ranked matches with rationale, confidence, and risk labels.
+- Surface: organizer dashboard with top pairs, non-obvious high-value pairs, and per-attendee recommendations.
 - Control plane: organizer decisioning (`approved/rejected/pending`) plus intro notes persisted in SQLite.
 
 ## 3. Matching Logic & Explanations
@@ -20,6 +21,7 @@ Scoring uses a weighted model:
 
 Each match includes an explanation string and confidence value for human review.
 Explanation generation uses an LLM when enabled (`ENABLE_LLM_RATIONALE=1` with API key), with deterministic fallback templates for reliability.
+The engine also labels each recommendation with `risk_level`/`risk_reasons` and surfaces a non-obvious match list to highlight complementary opportunities beyond obvious keyword overlap.
 
 ## 4. Test Profiles and Recommended Matches
 Top recommendations from current engine:
@@ -77,11 +79,13 @@ Non-obvious but high-value example:
 - Validation:
   - `scripts/validate_level2.py` (ranking order, rationale presence, profile coverage)
 
-### Level 3 Evidence (Current Starter)
+### Level 3 Evidence (Implemented)
 - `app/main.py` provides a FastAPI backend with documented endpoints and dashboard serving.
 - `app/server.py` starts the FastAPI stack for quick local execution.
-- `app/static` provides a clickable web dashboard with organizer actions (approve/reject + notes).
+- `app/static` provides a clickable web dashboard with top pairs, non-obvious pairs, risk indicators, and organizer actions (approve/reject + notes).
 - `app/db.py` persists organizer actions in SQLite (`data/matchmaking.db`).
+- Runtime profile ingestion is supported via `/api/profiles/ingest` with reset via `/api/profiles/reset`.
+- `scripts/validate_level3.py` verifies risk metadata and non-obvious output coverage.
 
 ## 7. Commercialization & Scale Path
 - Tiered monetization:

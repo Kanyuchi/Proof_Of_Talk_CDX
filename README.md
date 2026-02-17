@@ -12,10 +12,10 @@ Build a premium matchmaking product for Proof of Talk 2026 that:
 ## Current Implementation
 - `app/main.py`: FastAPI backend with interactive docs (`/docs`)
 - `app/server.py`: compatibility launcher for FastAPI (`python3 app/server.py`)
-- `app/matching.py`: weighted matching logic (fit, complementarity, readiness)
+- `app/matching.py`: weighted matching logic + risk indicators + non-obvious match detection
 - `app/enrichment.py`: mock enrichment layer for profile signal expansion
 - `app/db.py`: SQLite persistence for organizer actions and notes
-- `app/static/*`: organizer dashboard (overview, top intro pairs, per-profile matches)
+- `app/static/*`: organizer dashboard (overview, top intro pairs, non-obvious matches, per-profile actions)
 - `scripts/generate_matches.py`: offline match generation
 - `data/test_profiles.json`: 5 required case-study personas
 - `data/match_results.json`: generated ranked matches
@@ -45,8 +45,11 @@ FastAPI docs (when dependencies are installed): `http://127.0.0.1:8000/docs`
 ## API Endpoints
 - `GET /health`
 - `GET /api/profiles`
+- `POST /api/profiles/ingest`
+- `POST /api/profiles/reset`
 - `GET /api/matches`
 - `GET /api/matches?profile_id=p1`
+- `GET /api/non-obvious-matches`
 - `GET /api/dashboard`
 - `GET /api/actions`
 - `POST /api/actions`
@@ -55,7 +58,7 @@ FastAPI docs (when dependencies are installed): `http://127.0.0.1:8000/docs`
 ## Level Mapping
 - Level 1: strategy narrative complete in `docs/case-study-response.md`
 - Level 2: wireframes + runnable script/notebook + deterministic outputs complete in `docs/level2/*` and `notebooks/matching_demo.ipynb`
-- Level 3 (starter): clickable dashboard + enrichment + ranking + rationale generation
+- Level 3: clickable dashboard + enrichment connectors + explainable ranking + ingestion API + organizer control plane
 
 ## Organizer Action Payload
 ```json
@@ -81,6 +84,20 @@ FastAPI docs (when dependencies are installed): `http://127.0.0.1:8000/docs`
 ## Testing
 ```bash
 python3 -m unittest discover -s tests -v
+```
+
+## Level 3 Runbook
+```bash
+python3 scripts/generate_matches.py
+python3 scripts/validate_level3.py
+python3 app/server.py
+```
+
+Optional ingestion example:
+```bash
+curl -X POST http://127.0.0.1:8000/api/profiles/ingest \\
+  -H "Content-Type: application/json" \\
+  -d '{"overwrite":true,"profiles":[{"id":"x1","name":"New Investor"},{"id":"x2","name":"New Builder"}]}'
 ```
 
 ## Level 2 Runbook

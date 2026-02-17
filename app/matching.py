@@ -16,6 +16,8 @@ class MatchScore:
     complementarity_score: float
     readiness_score: float
     confidence: float
+    risk_level: str
+    risk_reasons: List[str]
     rationale: str
 
 
@@ -108,8 +110,28 @@ def _complementarity(a: Dict[str, Any], b: Dict[str, Any]) -> float:
     return 0.45
 
 
+def _risk_assessment(fit: float, readiness: float, confidence: float) -> Tuple[str, List[str]]:
+    reasons: List[str] = []
+    if fit < 0.06:
+        reasons.append("low thesis overlap")
+    if readiness < 0.55:
+        reasons.append("lower near-term execution readiness")
+    if confidence < 0.62:
+        reasons.append("model confidence below preferred threshold")
+
+    if len(reasons) >= 2:
+        return "high", reasons
+    if len(reasons) == 1:
+        return "medium", reasons
+    return "low", ["strong fit-readiness-confidence profile"]
+
+
 def _rationale(a: Dict[str, Any], b: Dict[str, Any], fit: float, comp: float, ready: float) -> str:
     return generate_match_rationale(a, b, fit, comp, ready)
+
+
+def _confidence(fit: float, readiness: float) -> float:
+    return min(0.55 + (0.35 * fit) + (0.1 * readiness), 0.98)
 
 
 def rank_for_profile(source: Dict[str, Any], targets: List[Dict[str, Any]]) -> List[MatchScore]:
@@ -124,7 +146,8 @@ def rank_for_profile(source: Dict[str, Any], targets: List[Dict[str, Any]]) -> L
         ready = (source_ready + _deal_readiness(target)) / 2
 
         weighted = (0.4 * fit) + (0.35 * comp) + (0.25 * ready)
-        confidence = min(0.55 + (0.35 * fit) + (0.1 * ready), 0.98)
+        confidence = _confidence(fit, ready)
+        risk_level, risk_reasons = _risk_assessment(fit, ready, confidence)
 
         results.append(
             MatchScore(
@@ -135,6 +158,8 @@ def rank_for_profile(source: Dict[str, Any], targets: List[Dict[str, Any]]) -> L
                 complementarity_score=round(comp, 4),
                 readiness_score=round(ready, 4),
                 confidence=round(confidence, 4),
+                risk_level=risk_level,
+                risk_reasons=risk_reasons,
                 rationale=_rationale(source, target, fit, comp, ready),
             )
         )
@@ -158,6 +183,8 @@ def generate_all_matches(profiles: List[Dict[str, Any]]) -> Dict[str, List[Dict[
                 "complementarity_score": r.complementarity_score,
                 "readiness_score": r.readiness_score,
                 "confidence": r.confidence,
+                "risk_level": r.risk_level,
+                "risk_reasons": r.risk_reasons,
                 "rationale": r.rationale,
             }
             for idx, r in enumerate(ranked)
@@ -174,6 +201,8 @@ def top_intro_pairs(profiles: List[Dict[str, Any]], limit: int = 10) -> List[Dic
         comp = _complementarity(a, b)
         ready = (_deal_readiness(a) + _deal_readiness(b)) / 2
         score = (0.4 * fit) + (0.35 * comp) + (0.25 * ready)
+        conf = _confidence(fit, ready)
+        risk_level, risk_reasons = _risk_assessment(fit, ready, conf)
 
         pairs.append(
             (
@@ -184,6 +213,9 @@ def top_intro_pairs(profiles: List[Dict[str, Any]], limit: int = 10) -> List[Dic
                     "to_id": b["id"],
                     "to_name": b["name"],
                     "score": round(score, 4),
+                    "confidence": round(conf, 4),
+                    "risk_level": risk_level,
+                    "risk_reasons": risk_reasons,
                     "rationale": _rationale(a, b, fit, comp, ready),
                 },
             )
@@ -191,3 +223,39 @@ def top_intro_pairs(profiles: List[Dict[str, Any]], limit: int = 10) -> List[Dic
 
     pairs.sort(key=lambda x: x[0], reverse=True)
     return [p[1] for p in pairs[:limit]]
+
+
+def top_non_obvious_pairs(profiles: List[Dict[str, Any]], limit: int = 5) -> List[Dict[str, Any]]:
+    # Non-obvious pairs have lower lexical overlap but high complementarity and decent readiness.
+    candidates: List[Tuple[float, Dict[str, Any]]] = []
+
+    for a, b in itertools.combinations(profiles, 2):
+        fit = _jaccard(_to_bag(a), _to_bag(b))
+        comp = _complementarity(a, b)
+        ready = (_deal_readiness(a) + _deal_readiness(b)) / 2
+        final_score = (0.4 * fit) + (0.35 * comp) + (0.25 * ready)
+        novelty_score = (1 - fit) * comp
+
+        if fit <= 0.12 and comp >= 0.75 and final_score >= 0.4:
+            conf = _confidence(fit, ready)
+            risk_level, risk_reasons = _risk_assessment(fit, ready, conf)
+            candidates.append(
+                (
+                    novelty_score * 0.55 + final_score * 0.45,
+                    {
+                        "from_id": a["id"],
+                        "from_name": a["name"],
+                        "to_id": b["id"],
+                        "to_name": b["name"],
+                        "score": round(final_score, 4),
+                        "novelty_score": round(novelty_score, 4),
+                        "confidence": round(conf, 4),
+                        "risk_level": risk_level,
+                        "risk_reasons": risk_reasons,
+                        "rationale": _rationale(a, b, fit, comp, ready),
+                    },
+                )
+            )
+
+    candidates.sort(key=lambda x: x[0], reverse=True)
+    return [x[1] for x in candidates[:limit]]

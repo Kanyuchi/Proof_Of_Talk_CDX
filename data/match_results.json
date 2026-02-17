@@ -10,6 +10,10 @@
         "complementarity_score": 1.0,
         "readiness_score": 0.875,
         "confidence": 0.6958,
+        "risk_level": "low",
+        "risk_reasons": [
+          "strong fit-readiness-confidence profile"
+        ],
         "rationale": "Amara Okafor \u2194 Marcus Chen: high strategic complementarity, both sides show near-term execution readiness. Recommended for a high-value intro based on product-investor-regulatory fit."
       },
       {
@@ -21,6 +25,10 @@
         "complementarity_score": 1.0,
         "readiness_score": 0.575,
         "confidence": 0.6303,
+        "risk_level": "low",
+        "risk_reasons": [
+          "strong fit-readiness-confidence profile"
+        ],
         "rationale": "Amara Okafor \u2194 James Whitfield: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
       },
       {
@@ -32,6 +40,10 @@
         "complementarity_score": 0.5,
         "readiness_score": 0.875,
         "confidence": 0.6608,
+        "risk_level": "low",
+        "risk_reasons": [
+          "strong fit-readiness-confidence profile"
+        ],
         "rationale": "Amara Okafor \u2194 Dr. Elena Vasquez: both sides show near-term execution readiness. Recommended for a high-value intro based on product-investor-regulatory fit."
       },
       {
@@ -43,6 +55,10 @@
         "complementarity_score": 0.75,
         "readiness_score": 0.475,
         "confidence": 0.6225,
+        "risk_level": "medium",
+        "risk_reasons": [
+          "lower near-term execution readiness"
+        ],
         "rationale": "Amara Okafor \u2194 Sophie Bergmann: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
       }
     ],
@@ -56,6 +72,10 @@
         "complementarity_score": 1.0,
         "readiness_score": 1.0,
         "confidence": 0.6961,
+        "risk_level": "low",
+        "risk_reasons": [
+          "strong fit-readiness-confidence profile"
+        ],
         "rationale": "Marcus Chen \u2194 Dr. Elena Vasquez: high strategic complementarity, both sides show near-term execution readiness. Recommended for a high-value intro based on product-investor-regulatory fit."
       },
       {
@@ -67,6 +87,10 @@
         "complementarity_score": 1.0,
         "readiness_score": 0.875,
         "confidence": 0.6958,
+        "risk_level": "low",
+        "risk_reasons": [
+          "strong fit-readiness-confidence profile"
+        ],
         "rationale": "Marcus Chen \u2194 Amara Okafor: high strategic complementarity, both sides show near-term execution readiness. Recommended for a high-value intro based on product-investor-regulatory fit."
       },
       {
@@ -78,6 +102,10 @@
         "complementarity_score": 0.9,
         "readiness_score": 0.6,
         "confidence": 0.6384,
+        "risk_level": "low",
+        "risk_reasons": [
+          "strong fit-readiness-confidence profile"
+        ],
         "rationale": "Marcus Chen \u2194 Sophie Bergmann: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
       },
       {
@@ -89,6 +117,10 @@
         "complementarity_score": 0.6,
         "readiness_score": 0.7,
         "confidence": 0.6753,
+        "risk_level": "low",
+        "risk_reasons": [
+          "strong fit-readiness-confidence profile"
+        ],
         "rationale": "Marcus Chen \u2194 James Whitfield: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
       }
     ],
@@ -102,6 +134,10 @@
         "complementarity_score": 1.0,
         "readiness_score": 1.0,
         "confidence": 0.6961,
+        "risk_level": "low",
+        "risk_reasons": [
+          "strong fit-readiness-confidence profile"
+        ],
         "rationale": "Dr. Elena Vasquez \u2194 Marcus Chen: high strategic complementarity, both sides show near-term execution readiness. Recommended for a high-value intro based on product-investor-regulatory fit."
       },
       {
@@ -113,6 +149,10 @@
         "complementarity_score": 1.0,
         "readiness_score": 0.7,
         "confidence": 0.6283,
+        "risk_level": "medium",
+        "risk_reasons": [
+          "low thesis overlap"
+        ],
         "rationale": "Dr. Elena Vasquez \u2194 James Whitfield: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
       },
       {
@@ -124,6 +164,10 @@
         "complementarity_score": 0.75,
         "readiness_score": 0.6,
         "confidence": 0.6289,
+        "risk_level": "medium",
+        "risk_reasons": [
+          "low thesis overlap"
+        ],
         "rationale": "Dr. Elena Vasquez \u2194 Sophie Bergmann: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
       },
       {
@@ -135,6 +179,10 @@
         "complementarity_score": 0.5,
         "readiness_score": 0.875,
         "confidence": 0.6608,
+        "risk_level": "low",
+        "risk_reasons": [
+          "strong fit-readiness-confidence profile"
+        ],
         "rationale": "Dr. Elena Vasquez \u2194 Amara Okafor: both sides show near-term execution readiness. Recommended for a high-value intro based on product-investor-regulatory fit."
       }
     ],
@@ -148,6 +196,10 @@
         "complementarity_score": 1.0,
         "readiness_score": 0.7,
         "confidence": 0.6283,
+        "risk_level": "medium",
+        "risk_reasons": [
+          "low thesis overlap"
+        ],
         "rationale": "James Whitfield \u2194 Dr. Elena Vasquez: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
       },
       {
@@ -159,6 +211,10 @@
         "complementarity_score": 1.0,
         "readiness_score": 0.575,
         "confidence": 0.6303,
+        "risk_level": "low",
+        "risk_reasons": [
+          "strong fit-readiness-confidence profile"
+        ],
         "rationale": "James Whitfield \u2194 Amara Okafor: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
       },
       {
@@ -170,6 +226,10 @@
         "complementarity_score": 0.6,
         "readiness_score": 0.7,
         "confidence": 0.6753,
+        "risk_level": "low",
+        "risk_reasons": [
+          "strong fit-readiness-confidence profile"
+        ],
         "rationale": "James Whitfield \u2194 Marcus Chen: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
       },
       {
@@ -181,6 +241,12 @@
         "complementarity_score": 0.9,
         "readiness_score": 0.3,
         "confidence": 0.5984,
+        "risk_level": "high",
+        "risk_reasons": [
+          "low thesis overlap",
+          "lower near-term execution readiness",
+          "model confidence below preferred threshold"
+        ],
         "rationale": "James Whitfield \u2194 Sophie Bergmann: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
       }
     ],
@@ -194,6 +260,10 @@
         "complementarity_score": 0.9,
         "readiness_score": 0.6,
         "confidence": 0.6384,
+        "risk_level": "low",
+        "risk_reasons": [
+          "strong fit-readiness-confidence profile"
+        ],
         "rationale": "Sophie Bergmann \u2194 Marcus Chen: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
       },
       {
@@ -205,6 +275,10 @@
         "complementarity_score": 0.75,
         "readiness_score": 0.6,
         "confidence": 0.6289,
+        "risk_level": "medium",
+        "risk_reasons": [
+          "low thesis overlap"
+        ],
         "rationale": "Sophie Bergmann \u2194 Dr. Elena Vasquez: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
       },
       {
@@ -216,6 +290,12 @@
         "complementarity_score": 0.9,
         "readiness_score": 0.3,
         "confidence": 0.5984,
+        "risk_level": "high",
+        "risk_reasons": [
+          "low thesis overlap",
+          "lower near-term execution readiness",
+          "model confidence below preferred threshold"
+        ],
         "rationale": "Sophie Bergmann \u2194 James Whitfield: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
       },
       {
@@ -227,6 +307,10 @@
         "complementarity_score": 0.75,
         "readiness_score": 0.475,
         "confidence": 0.6225,
+        "risk_level": "medium",
+        "risk_reasons": [
+          "lower near-term execution readiness"
+        ],
         "rationale": "Sophie Bergmann \u2194 Amara Okafor: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
       }
     ]
@@ -238,6 +322,11 @@
       "to_id": "p3",
       "to_name": "Dr. Elena Vasquez",
       "score": 0.6526,
+      "confidence": 0.6961,
+      "risk_level": "low",
+      "risk_reasons": [
+        "strong fit-readiness-confidence profile"
+      ],
       "rationale": "Marcus Chen \u2194 Dr. Elena Vasquez: high strategic complementarity, both sides show near-term execution readiness. Recommended for a high-value intro based on product-investor-regulatory fit."
     },
     {
@@ -246,6 +335,11 @@
       "to_id": "p2",
       "to_name": "Marcus Chen",
       "score": 0.6354,
+      "confidence": 0.6958,
+      "risk_level": "low",
+      "risk_reasons": [
+        "strong fit-readiness-confidence profile"
+      ],
       "rationale": "Amara Okafor \u2194 Marcus Chen: high strategic complementarity, both sides show near-term execution readiness. Recommended for a high-value intro based on product-investor-regulatory fit."
     },
     {
@@ -254,6 +348,11 @@
       "to_id": "p4",
       "to_name": "James Whitfield",
       "score": 0.5345,
+      "confidence": 0.6283,
+      "risk_level": "medium",
+      "risk_reasons": [
+        "low thesis overlap"
+      ],
       "rationale": "Dr. Elena Vasquez \u2194 James Whitfield: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
     },
     {
@@ -262,6 +361,11 @@
       "to_id": "p4",
       "to_name": "James Whitfield",
       "score": 0.5198,
+      "confidence": 0.6303,
+      "risk_level": "low",
+      "risk_reasons": [
+        "strong fit-readiness-confidence profile"
+      ],
       "rationale": "Amara Okafor \u2194 James Whitfield: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
     },
     {
@@ -270,6 +374,11 @@
       "to_id": "p5",
       "to_name": "Sophie Bergmann",
       "score": 0.4974,
+      "confidence": 0.6384,
+      "risk_level": "low",
+      "risk_reasons": [
+        "strong fit-readiness-confidence profile"
+      ],
       "rationale": "Marcus Chen \u2194 Sophie Bergmann: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
     },
     {
@@ -278,6 +387,11 @@
       "to_id": "p4",
       "to_name": "James Whitfield",
       "score": 0.4482,
+      "confidence": 0.6753,
+      "risk_level": "low",
+      "risk_reasons": [
+        "strong fit-readiness-confidence profile"
+      ],
       "rationale": "Marcus Chen \u2194 James Whitfield: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
     },
     {
@@ -286,6 +400,11 @@
       "to_id": "p5",
       "to_name": "Sophie Bergmann",
       "score": 0.4341,
+      "confidence": 0.6289,
+      "risk_level": "medium",
+      "risk_reasons": [
+        "low thesis overlap"
+      ],
       "rationale": "Dr. Elena Vasquez \u2194 Sophie Bergmann: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
     },
     {
@@ -294,6 +413,11 @@
       "to_id": "p3",
       "to_name": "Dr. Elena Vasquez",
       "score": 0.4204,
+      "confidence": 0.6608,
+      "risk_level": "low",
+      "risk_reasons": [
+        "strong fit-readiness-confidence profile"
+      ],
       "rationale": "Amara Okafor \u2194 Dr. Elena Vasquez: both sides show near-term execution readiness. Recommended for a high-value intro based on product-investor-regulatory fit."
     },
     {
@@ -302,6 +426,13 @@
       "to_id": "p5",
       "to_name": "Sophie Bergmann",
       "score": 0.4111,
+      "confidence": 0.5984,
+      "risk_level": "high",
+      "risk_reasons": [
+        "low thesis overlap",
+        "lower near-term execution readiness",
+        "model confidence below preferred threshold"
+      ],
       "rationale": "James Whitfield \u2194 Sophie Bergmann: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
     },
     {
@@ -310,7 +441,86 @@
       "to_id": "p5",
       "to_name": "Sophie Bergmann",
       "score": 0.4098,
+      "confidence": 0.6225,
+      "risk_level": "medium",
+      "risk_reasons": [
+        "lower near-term execution readiness"
+      ],
       "rationale": "Amara Okafor \u2194 Sophie Bergmann: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
+    }
+  ],
+  "top_non_obvious_pairs": [
+    {
+      "from_id": "p3",
+      "from_name": "Dr. Elena Vasquez",
+      "to_id": "p4",
+      "to_name": "James Whitfield",
+      "score": 0.5345,
+      "novelty_score": 0.9762,
+      "confidence": 0.6283,
+      "risk_level": "medium",
+      "risk_reasons": [
+        "low thesis overlap"
+      ],
+      "rationale": "Dr. Elena Vasquez \u2194 James Whitfield: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
+    },
+    {
+      "from_id": "p1",
+      "from_name": "Amara Okafor",
+      "to_id": "p4",
+      "to_name": "James Whitfield",
+      "score": 0.5198,
+      "novelty_score": 0.9348,
+      "confidence": 0.6303,
+      "risk_level": "low",
+      "risk_reasons": [
+        "strong fit-readiness-confidence profile"
+      ],
+      "rationale": "Amara Okafor \u2194 James Whitfield: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
+    },
+    {
+      "from_id": "p2",
+      "from_name": "Marcus Chen",
+      "to_id": "p5",
+      "to_name": "Sophie Bergmann",
+      "score": 0.4974,
+      "novelty_score": 0.827,
+      "confidence": 0.6384,
+      "risk_level": "low",
+      "risk_reasons": [
+        "strong fit-readiness-confidence profile"
+      ],
+      "rationale": "Marcus Chen \u2194 Sophie Bergmann: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
+    },
+    {
+      "from_id": "p4",
+      "from_name": "James Whitfield",
+      "to_id": "p5",
+      "to_name": "Sophie Bergmann",
+      "score": 0.4111,
+      "novelty_score": 0.8526,
+      "confidence": 0.5984,
+      "risk_level": "high",
+      "risk_reasons": [
+        "low thesis overlap",
+        "lower near-term execution readiness",
+        "model confidence below preferred threshold"
+      ],
+      "rationale": "James Whitfield \u2194 Sophie Bergmann: high strategic complementarity. Recommended for a high-value intro based on product-investor-regulatory fit."
+    },
+    {
+      "from_id": "p3",
+      "from_name": "Dr. Elena Vasquez",
+      "to_id": "p5",
+      "to_name": "Sophie Bergmann",
+      "score": 0.4341,
+      "novelty_score": 0.7095,
+      "confidence": 0.6289,
+      "risk_level": "medium",
+      "risk_reasons": [
+        "low thesis overlap"
+      ],
+      "rationale": "Dr. Elena Vasquez \u2194 Sophie Bergmann: adjacent priorities with potential non-obvious collaboration. Recommended for a high-value intro based on product-investor-regulatory fit."
     }
   ]
 }
