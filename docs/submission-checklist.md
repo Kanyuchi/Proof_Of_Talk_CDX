@@ -20,6 +20,6 @@
 - [ ] Email package to `z@xventures.de`
 
 ## Risks / Gaps (explicitly documented)
-- Live enrichment connectors are mocked for demo reliability.
-- LLM rationale is currently deterministic template logic.
+- Live connectors are implemented with graceful fallback; production rollout depends on valid provider keys/quotas.
+- LLM rationale path is implemented with deterministic fallback for reliability.
 - Scheduling and calendar integration are out-of-scope for first pass.

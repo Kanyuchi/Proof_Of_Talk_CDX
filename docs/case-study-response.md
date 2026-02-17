@@ -1,4 +1,4 @@
-# Case Study Response Draft
+# Case Study Response (Submission-Ready)
 
 ## 1. Product Vision
 Proof of Talk should provide concierge-level matchmaking that behaves like an investment-banking intro desk, not a conference attendee directory. The experience begins at registration, enriches each attendee profile before arrival, and delivers prioritized intros with clear reasons and deal-readiness indicators.
@@ -33,10 +33,31 @@ Non-obvious but high-value example:
 - Sophie Bergmann ↔ Marcus Chen: regulator-sandbox perspective paired with live institutional custody infrastructure.
 
 ## 5. Business Case
-- Primary model: premium feature for Proof of Talk ticket tiers and sponsor packages.
-- Secondary model: white-label B2B licensing for other high-signal events.
-- Moat: proprietary behavioral and outcomes data from elite attendee interactions.
-- Expansion: cross-event intelligence graph + partner CRM integrations.
+### Monetization Model
+- Primary: premium matchmaking add-on bundled into VIP/operator tiers and sold as sponsor intelligence package.
+- Secondary: white-label annual license for other flagship conferences and investor summits.
+- Data moat: intro acceptance, meeting completion, and deal-outcome feedback loops improve ranking quality per event.
+
+### Unit Economics (Assumption-Based)
+- Event scale: 2,500 attendees.
+- Matchmaking addressable cohort: 1,000 high-intent attendees (investors, founders, operators, regulators).
+- Premium matchmaking attach rate: 25% (250 users).
+- Per-user premium add-on: EUR 600.
+- Sponsor intelligence packages: 8 packages at EUR 12,500 each.
+- Estimated event-level revenue from matchmaking layer:
+  - Premium users: 250 x 600 = EUR 150,000
+  - Sponsors: 8 x 12,500 = EUR 100,000
+  - Total: EUR 250,000 incremental gross revenue
+- Estimated direct event-level costs:
+  - Data/API + inference ops: EUR 20,000
+  - Product + ops support allocation: EUR 55,000
+  - Total: EUR 75,000
+- Estimated contribution: EUR 175,000 per event (before shared overhead).
+
+### ROI Logic for Organizer
+- Higher meeting quality increases attendee renewal probability and sponsor retention.
+- Organizer operations become more efficient via ranked intros and manual override workflow.
+- Reuse across events compounds returns because model quality improves with historical outcome data.
 
 ## 6. Level 2 and Level 3 Build Evidence
 - `scripts/generate_matches.py` demonstrates recommendation generation.
@@ -55,3 +76,13 @@ Non-obvious but high-value example:
   - track accepted/rejected intros and outcomes
   - retrain ranking weights by real conversion to meetings/deals
   - increase confidence scoring quality event over event
+
+## 8. Risks & Mitigations
+- Risk: external enrichment APIs can rate-limit or fail.
+  Mitigation: connector registry with environment flags and deterministic fallback signals.
+- Risk: LLM explanation variability can reduce trust.
+  Mitigation: deterministic template fallback and score-grounded rationale generation.
+- Risk: weak conversion from recommendation to actual meetings.
+  Mitigation: human-in-the-loop organizer controls, action tracking, and feedback-based reweighting.
+- Risk: compliance/privacy concerns for attendee data.
+  Mitigation: minimum necessary data storage, explicit source logging, and per-event data segregation.
