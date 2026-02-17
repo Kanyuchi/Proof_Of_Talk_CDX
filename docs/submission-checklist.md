@@ -1,0 +1,25 @@
+# Submission Checklist
+
+## Core Assets
+- [x] `README.md` setup and execution guide
+- [x] `docs/case-study-response.md` Level 1-3 narrative
+- [x] `data/test_profiles.json` five personas
+- [x] `scripts/generate_matches.py` runnable match generator
+- [x] `app/` clickable organizer prototype
+
+## Demo Readiness
+- [x] `GET /api/dashboard` returns ranked intros + explainability
+- [x] Organizer can set match status (`pending`, `approved`, `rejected`)
+- [x] Organizer notes persist in SQLite (`data/matchmaking.db`)
+- [x] Top-pair and per-profile views are visible in browser
+
+## Packaging
+- [ ] Record 3-5 minute demo walkthrough video
+- [ ] Export final case-study narrative PDF
+- [ ] Confirm repository URL and run commands are accurate
+- [ ] Email package to `z@xventures.de`
+
+## Risks / Gaps (explicitly documented)
+- Live enrichment connectors are mocked for demo reliability.
+- LLM rationale is currently deterministic template logic.
+- Scheduling and calendar integration are out-of-scope for first pass.

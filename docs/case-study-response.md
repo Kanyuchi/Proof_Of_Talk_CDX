@@ -9,6 +9,7 @@ Proof of Talk should provide concierge-level matchmaking that behaves like an in
 - Intelligence: normalized profile tags + weighted scoring.
 - Output: ranked matches with rationale and confidence.
 - Surface: organizer dashboard with top pairs and per-attendee recommendations.
+- Control plane: organizer decisioning (`approved/rejected/pending`) plus intro notes persisted in SQLite.
 
 ## 3. Matching Logic & Explanations
 Scoring uses a weighted model:
@@ -38,5 +39,18 @@ Non-obvious but high-value example:
 
 ## 6. Level 2 and Level 3 Build Evidence
 - `scripts/generate_matches.py` demonstrates recommendation generation.
-- `app/server.py` + `app/static` provides a clickable web dashboard.
+- `app/main.py` provides a FastAPI backend with documented endpoints and dashboard serving.
+- `app/server.py` starts the FastAPI stack for quick local execution.
+- `app/static` provides a clickable web dashboard with organizer actions (approve/reject + notes).
+- `app/db.py` persists organizer actions in SQLite (`data/matchmaking.db`).
 - `data/match_results.json` contains reproducible output from the 5 profile test set.
+
+## 7. Commercialization & Scale Path
+- Tiered monetization:
+  - included with premium event ticket tiers for attendees
+  - sponsor upsell for guaranteed high-value intro visibility
+  - white-label licensing for external enterprise conferences
+- Data flywheel:
+  - track accepted/rejected intros and outcomes
+  - retrain ranking weights by real conversion to meetings/deals
+  - increase confidence scoring quality event over event

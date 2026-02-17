@@ -132,6 +132,41 @@ button {
   margin: 0.25rem 0;
 }
 
+.badge {
+  border-radius: 999px;
+  padding: 0.1rem 0.45rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.badge-pending {
+  color: #78350f;
+  background: #fed7aa;
+}
+
+.badge-approved {
+  color: #14532d;
+  background: #bbf7d0;
+}
+
+.badge-rejected {
+  color: #7f1d1d;
+  background: #fecaca;
+}
+
+.action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+}
+
+.action-row input {
+  flex: 1;
+  min-width: 220px;
+}
+
 @media (max-width: 900px) {
   .grid {
     grid-template-columns: 1fr;
