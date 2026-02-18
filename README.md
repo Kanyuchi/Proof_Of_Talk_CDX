@@ -13,10 +13,12 @@ Build a premium matchmaking product for Proof of Talk 2026 that:
 - `app/main.py`: FastAPI backend with interactive docs (`/docs`)
 - `app/server.py`: compatibility launcher for FastAPI (`python3 app/server.py`)
 - `app/auth.py`: custom JWT auth + password hashing (Option 1 implementation)
+- `app/concierge.py`: AI concierge responder with LLM optional mode + fallback mode
 - `app/matching.py`: weighted matching logic + risk indicators + non-obvious match detection
 - `app/enrichment.py`: mock enrichment layer for profile signal expansion
 - `app/db.py`: multi-database persistence layer (`SQLite`, `PostgreSQL`, `MySQL`) via `DATABASE_URL`
 - `app/static/*`: multi-view UX (Home, Attendees, Dashboard, Chat, Auth/Profile)
+- `webapp/*`: React + React Router + React Query frontend implementing Phases 0-5
 - `scripts/generate_matches.py`: offline match generation
 - `data/test_profiles.json`: 5 required case-study personas
 - `data/match_results.json`: generated ranked matches
@@ -43,6 +45,17 @@ uvicorn app.main:app --host 127.0.0.1 --port 8000
 `http://127.0.0.1:8000`
 FastAPI docs (when dependencies are installed): `http://127.0.0.1:8000/docs`
 
+### React Frontend (Phase 0-5)
+1. In a new terminal:
+```bash
+cd webapp
+npm install
+npm run dev
+```
+2. Open:
+`http://127.0.0.1:5174`
+3. Keep backend running on port `8000` while using React UI.
+
 ## API Endpoints
 - `GET /health`
 - `POST /api/auth/register`
@@ -59,9 +72,16 @@ FastAPI docs (when dependencies are installed): `http://127.0.0.1:8000/docs`
 - `GET /api/dashboard`
 - `GET /api/actions`
 - `POST /api/actions`
+- `POST /api/admin/actions` (JWT + admin role)
 - `GET /api/chat/peers` (auth required)
 - `GET /api/chat/messages/{peer_user_id}` (auth required + matched peers only)
 - `POST /api/chat/messages` (auth required + matched peers only)
+- `POST /api/concierge/chat`
+- `GET /api/dashboard/segments`
+- `GET /api/dashboard/drilldown?from_id=<id>&to_id=<id>`
+- `GET /api/enrichment`
+- `GET /api/enrichment/{profile_id}`
+- `POST /api/enrichment/refresh`
 - `GET /docs` (FastAPI interactive docs)
 
 ## Level Mapping
@@ -100,6 +120,14 @@ FastAPI docs (when dependencies are installed): `http://127.0.0.1:8000/docs`
 2. Sign in with `POST /api/auth/login`.
 3. Token is used as `Authorization: Bearer <token>`.
 4. Private chat is enabled only for matched attendee pairs.
+
+## Phase Status
+- `Phase 0` Foundation: React Query hooks, demo fallback data, empty states, 404 route, and multi-select attendee role filters implemented in `webapp/src`.
+- `Phase 1` Auth: JWT user model, secure password hashing, auth routes, and frontend auth context + login/register/profile flows implemented.
+- `Phase 2` Interactive Dashboard: drill-down + segment endpoints and admin action buttons implemented.
+- `Phase 3` AI Concierge Chat: backend concierge service + floating frontend widget implemented.
+- `Phase 4` Enrichment UI: enrichment overview/detail/refresh endpoints + connector controls in attendees UI implemented.
+- `Phase 5` P2P Messaging: message model, REST polling hooks, and full Messages page implemented.
 
 ## Testing
 ```bash

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 
 from app.connectors import run_live_connectors
 
@@ -14,7 +14,11 @@ KEYWORD_ENRICHMENT = {
 }
 
 
-def enrich_profile(profile: Dict[str, Any]) -> Dict[str, Any]:
+def enrich_profile(
+    profile: Dict[str, Any],
+    live_enabled: Optional[bool] = None,
+    connectors_override: Optional[List[str]] = None,
+) -> Dict[str, Any]:
     """Mock enrichment layer for demo reliability.
 
     In production, this is where connectors for company sites, social data, and
@@ -39,8 +43,8 @@ def enrich_profile(profile: Dict[str, Any]) -> Dict[str, Any]:
 
     inferred_tags = sorted(set(inferred_tags))
 
-    live_enabled = os.getenv("ENABLE_LIVE_ENRICHMENT", "0") == "1"
-    live_result = run_live_connectors(profile) if live_enabled else {
+    should_run_live = (os.getenv("ENABLE_LIVE_ENRICHMENT", "0") == "1") if live_enabled is None else live_enabled
+    live_result = run_live_connectors(profile, connectors=connectors_override) if should_run_live else {
         "tags": [],
         "confidence_delta": 0.0,
         "sources": [],
@@ -61,8 +65,9 @@ def enrich_profile(profile: Dict[str, Any]) -> Dict[str, Any]:
             "market_data_mock",
             *live_result["sources"],
         ],
-        "live_connectors_enabled": live_enabled,
+        "live_connectors_enabled": should_run_live,
         "live_connector_errors": live_result["errors"],
+        "active_connectors": connectors_override or [],
         "live_connector_results": live_result.get("connector_results", []),
     }
     return profile_copy

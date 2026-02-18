@@ -106,6 +106,17 @@ class ConnectorsTest(unittest.TestCase):
         self.assertIn("clearbit_api_key_missing", result["errors"])
         self.assertIn("crunchbase_api_key_missing", result["errors"])
 
+    def test_run_live_connectors_manual_selection(self) -> None:
+        profile = {
+            "organization": "VaultBridge",
+            "stage": "Series B",
+            "capital_raised": "$40M",
+            "social_links": {"linkedin": "https://linkedin.com/in/demo"},
+        }
+        result = run_live_connectors(profile, connectors=["structured_funding", "social_profiles"])
+        self.assertIn("funding_stage:series b", result["tags"])
+        self.assertIn("social_presence:linkedin", result["tags"])
+
 
 if __name__ == "__main__":
     unittest.main()

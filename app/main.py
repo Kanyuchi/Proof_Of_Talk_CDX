@@ -13,6 +13,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from app.auth import bearer_token, create_access_token, decode_access_token, hash_password, verify_password
+from app.concierge import concierge_reply
 from app.db import (
     action_map,
     backend_summary,
@@ -86,6 +87,18 @@ class ProfileUpdateRequest(BaseModel):
 class ChatMessageCreate(BaseModel):
     to_user_id: str = Field(min_length=1)
     body: str = Field(min_length=1, max_length=3000)
+
+
+class ConciergeChatRequest(BaseModel):
+    message: str = Field(min_length=1, max_length=2000)
+    profile_id: Optional[str] = None
+    history: List[Dict[str, str]] = Field(default_factory=list)
+
+
+class EnrichmentRefreshRequest(BaseModel):
+    profile_id: Optional[str] = None
+    live_enabled: bool = True
+    connectors: List[str] = Field(default_factory=list)
 
 
 app = FastAPI(
@@ -194,6 +207,20 @@ def load_profiles() -> List[Dict[str, Any]]:
     return [enrich_profile(p) for p in _read_raw_profiles()]
 
 
+def _raw_profile_by_id(profile_id: str) -> Optional[Dict[str, Any]]:
+    for profile in _read_raw_profiles():
+        if str(profile.get("id", "")) == profile_id:
+            return profile
+    return None
+
+
+def _profile_by_id(profile_id: str) -> Optional[Dict[str, Any]]:
+    for profile in load_profiles():
+        if str(profile.get("id", "")) == profile_id:
+            return profile
+    return None
+
+
 def with_actions(per_profile: Dict[str, List[Dict[str, Any]]]) -> Dict[str, List[Dict[str, Any]]]:
     actions = action_map()
     merged: Dict[str, List[Dict[str, Any]]] = {}
@@ -227,6 +254,28 @@ def _authenticated_user(authorization: Optional[str] = Header(default=None)) -> 
     user = get_user_by_id(str(payload.get("sub", "")))
     if not user:
         raise HTTPException(status_code=401, detail="user not found")
+    return user
+
+
+def _optional_user(authorization: Optional[str] = Header(default=None)) -> Optional[Dict[str, Any]]:
+    if not authorization:
+        return None
+    try:
+        token = bearer_token(authorization)
+        payload = decode_access_token(token)
+        return get_user_by_id(str(payload.get("sub", "")))
+    except ValueError:
+        return None
+
+
+def _is_admin_role(role: str) -> bool:
+    return role in {"vip", "sponsor", "admin"}
+
+
+def _admin_user(user: Dict[str, Any] = Depends(_authenticated_user)) -> Dict[str, Any]:
+    role = str(user.get("role", "attendee")).lower().strip()
+    if not _is_admin_role(role):
+        raise HTTPException(status_code=403, detail="admin role required")
     return user
 
 
@@ -338,8 +387,12 @@ def profiles() -> Dict[str, Any]:
 def attendees(
     search: str = Query(default=""),
     role: Optional[str] = Query(default=None),
+    roles: Optional[str] = Query(default=None, description="Comma-separated role filters."),
 ) -> Dict[str, Any]:
     role_filter = role.lower().strip() if role else None
+    multi_filters = {r.strip().lower() for r in (roles or "").split(",") if r.strip()}
+    if role_filter:
+        multi_filters.add(role_filter)
     users_by_profile = {u["profile_id"]: u for u in list_users()}
     output: List[Dict[str, Any]] = []
     query = search.lower().strip()
@@ -366,7 +419,7 @@ def attendees(
         haystack = " ".join([row["name"], row["title"], row["organization"]]).lower()
         if query and query not in haystack:
             continue
-        if role_filter and attendee_role != role_filter:
+        if multi_filters and attendee_role not in multi_filters:
             continue
         output.append(row)
 
@@ -402,6 +455,13 @@ def save_action(payload: ActionUpsert) -> Dict[str, str]:
     now = _utc_now()
     upsert_action(payload.from_id, payload.to_id, payload.status, payload.notes, now)
     return {"status": "ok", "updated_at": now}
+
+
+@app.post("/api/admin/actions")
+def save_action_admin(payload: ActionUpsert, _admin: Dict[str, Any] = Depends(_admin_user)) -> Dict[str, str]:
+    now = _utc_now()
+    upsert_action(payload.from_id, payload.to_id, payload.status, payload.notes, now)
+    return {"status": "ok", "updated_at": now, "admin": _admin.get("email", "")}
 
 
 @app.get("/api/chat/peers")
@@ -463,6 +523,26 @@ def send_chat_message(payload: ChatMessageCreate, user: Dict[str, Any] = Depends
     return {"status": "ok", "message": message}
 
 
+@app.post("/api/concierge/chat")
+def concierge_chat(payload: ConciergeChatRequest, user: Optional[Dict[str, Any]] = Depends(_optional_user)) -> Dict[str, Any]:
+    dashboard_data = dashboard()
+    profile = _profile_by_id(payload.profile_id) if payload.profile_id else None
+    actor = _sanitize_user(user) if user else {}
+    response = concierge_reply(
+        message=payload.message,
+        profile=profile,
+        dashboard=dashboard_data,
+        history=payload.history,
+    )
+    return {
+        "status": "ok",
+        "assistant": response.get("reply", ""),
+        "mode": response.get("mode", "fallback"),
+        "history_used": response.get("history_used", len(payload.history)),
+        "actor": actor,
+    }
+
+
 @app.get("/api/matches")
 def matches(profile_id: Optional[str] = Query(default=None)) -> Dict[str, Any]:
     profiles_list = load_profiles()
@@ -492,6 +572,46 @@ def non_obvious_matches(limit: int = Query(default=5, ge=1, le=20)) -> Dict[str,
             },
         )
     return {"non_obvious_pairs": pairs}
+
+
+@app.get("/api/dashboard/drilldown")
+def dashboard_drilldown(from_id: str = Query(min_length=1), to_id: str = Query(min_length=1)) -> Dict[str, Any]:
+    profiles_list = load_profiles()
+    per_profile = with_actions(generate_all_matches(profiles_list))
+    rows = per_profile.get(from_id, [])
+    match_row = next((r for r in rows if r.get("target_id") == to_id), None)
+    if not match_row:
+        raise HTTPException(status_code=404, detail="match pair not found")
+    source = next((p for p in profiles_list if p.get("id") == from_id), None)
+    target = next((p for p in profiles_list if p.get("id") == to_id), None)
+    return {
+        "from_profile": source or {},
+        "to_profile": target or {},
+        "match": match_row,
+        "related_non_obvious": [
+            x for x in top_non_obvious_pairs(profiles_list, limit=10) if {x.get("from_id"), x.get("to_id")} == {from_id, to_id}
+        ],
+    }
+
+
+@app.get("/api/dashboard/segments")
+def dashboard_segments() -> Dict[str, Any]:
+    profiles_list = load_profiles()
+    users_by_profile = {u["profile_id"]: u for u in list_users()}
+    role_counts: Dict[str, int] = {r: 0 for r in sorted(ROLE_CHOICES)}
+    tag_counts: Dict[str, int] = {}
+
+    for p in profiles_list:
+        role = _normalize_role(str((users_by_profile.get(p.get("id", ""), {}) or {}).get("role", p.get("attendee_type", "attendee"))))
+        role_counts[role] = role_counts.get(role, 0) + 1
+        for tag in p.get("enrichment", {}).get("inferred_tags", [])[:8]:
+            tag_counts[tag] = tag_counts.get(tag, 0) + 1
+
+    top_tags = sorted(tag_counts.items(), key=lambda x: x[1], reverse=True)[:12]
+    return {
+        "roles": role_counts,
+        "top_interest_tags": [{"tag": t, "count": c} for t, c in top_tags],
+    }
 
 
 @app.get("/api/dashboard")
@@ -545,6 +665,55 @@ def dashboard() -> Dict[str, Any]:
         "top_intro_pairs": pairs,
         "top_non_obvious_pairs": non_obvious,
         "per_profile": per_profile,
+    }
+
+
+@app.get("/api/enrichment")
+def enrichment_overview() -> Dict[str, Any]:
+    profiles_list = load_profiles()
+    rows = []
+    for profile in profiles_list:
+        enrich = profile.get("enrichment", {})
+        rows.append(
+            {
+                "profile_id": profile.get("id", ""),
+                "name": profile.get("name", ""),
+                "source_confidence": enrich.get("source_confidence", 0),
+                "inferred_tags": enrich.get("inferred_tags", []),
+                "sources": enrich.get("sources", []),
+                "live_connector_errors": enrich.get("live_connector_errors", []),
+                "live_connector_results": enrich.get("live_connector_results", []),
+            }
+        )
+    return {"enrichment": rows}
+
+
+@app.post("/api/enrichment/refresh")
+def enrichment_refresh(payload: EnrichmentRefreshRequest) -> Dict[str, Any]:
+    if payload.profile_id:
+        raw = _raw_profile_by_id(payload.profile_id)
+        if not raw:
+            raise HTTPException(status_code=404, detail="profile not found")
+        enriched = enrich_profile(raw, live_enabled=payload.live_enabled, connectors_override=payload.connectors or None)
+        return {"status": "ok", "profile": enriched, "connectors": payload.connectors}
+
+    enriched_all = [
+        enrich_profile(raw, live_enabled=payload.live_enabled, connectors_override=payload.connectors or None)
+        for raw in _read_raw_profiles()
+    ]
+    return {"status": "ok", "profiles": enriched_all, "count": len(enriched_all), "connectors": payload.connectors}
+
+
+@app.get("/api/enrichment/{profile_id}")
+def enrichment_detail(profile_id: str) -> Dict[str, Any]:
+    profile = _profile_by_id(profile_id)
+    if not profile:
+        raise HTTPException(status_code=404, detail="profile not found")
+    return {
+        "profile_id": profile_id,
+        "name": profile.get("name", ""),
+        "enrichment": profile.get("enrichment", {}),
+        "social_links": profile.get("social_links", {}),
     }
 
 

@@ -312,12 +312,16 @@ def _enabled_connectors() -> List[str]:
     raw = os.getenv("LIVE_CONNECTORS", "website,structured_funding,social_profiles")
     requested = [c.strip() for c in raw.split(",") if c.strip()]
     valid = [c for c in requested if c in CONNECTOR_REGISTRY]
-    return valid or ["website", "structured_funding"]
+    return valid or ["website", "structured_funding", "social_profiles"]
 
 
-def run_live_connectors(profile: Dict[str, Any]) -> Dict[str, Any]:
+def run_live_connectors(profile: Dict[str, Any], connectors: Optional[List[str]] = None) -> Dict[str, Any]:
+    selected = [c for c in (connectors or _enabled_connectors()) if c in CONNECTOR_REGISTRY]
+    if not selected:
+        selected = ["website", "structured_funding", "social_profiles"]
+
     connector_results = []
-    for connector_name in _enabled_connectors():
+    for connector_name in selected:
         handler = CONNECTOR_REGISTRY[connector_name]
         connector_results.append(handler(profile))
 

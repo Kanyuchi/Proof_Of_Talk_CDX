@@ -7,3 +7,5 @@ data/matchmaking.db
 data/runtime_profiles.json
 .env
 .env.local
+webapp/node_modules/
+webapp/dist/
