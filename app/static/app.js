@@ -4,9 +4,11 @@ const nonObviousPairs = document.getElementById("nonObviousPairs");
 const profileSelect = document.getElementById("profileSelect");
 const profileMatches = document.getElementById("profileMatches");
 const refreshBtn = document.getElementById("refreshBtn");
+const toast = document.getElementById("toast");
 
 let dashboardData = null;
 let profiles = [];
+let toastTimer = null;
 
 function stat(label, value) {
   return `<div class="stat"><div class="label">${label}</div><div class="value">${value}</div></div>`;
@@ -77,14 +79,14 @@ function renderProfileMatches(profileId) {
   profileMatches.innerHTML = matches
     .map(
       (m) => `
-      <article class="item">
+      <article class="item profile-item status-${m.action?.status || "pending"}" id="match-${profileId}-${m.target_id}">
         <h3>Priority ${m.priority_rank}: ${m.target_name}</h3>
         <p class="meta">Score ${m.score} | Fit ${m.fit_score} | Complementarity ${m.complementarity_score} | Readiness ${m.readiness_score} | Confidence ${m.confidence}</p>
         <p class="meta">Risk: ${riskBadge(m.risk_level)} | Status: ${statusBadge(m.action?.status)}</p>
         <p class="meta">${(m.risk_reasons || []).join(", ")}</p>
         <p>${m.rationale}</p>
         <div class="action-row">
-          <select id="status-${profileId}-${m.target_id}">
+          <select id="status-${profileId}-${m.target_id}" data-original-status="${m.action?.status || "pending"}">
             <option value="pending" ${m.action?.status === "pending" ? "selected" : ""}>pending</option>
             <option value="approved" ${m.action?.status === "approved" ? "selected" : ""}>approved</option>
             <option value="rejected" ${m.action?.status === "rejected" ? "selected" : ""}>rejected</option>
@@ -103,20 +105,68 @@ function renderProfileMatches(profileId) {
 async function saveAction(fromId, toId) {
   const statusEl = document.getElementById(`status-${fromId}-${toId}`);
   const notesEl = document.getElementById(`notes-${fromId}-${toId}`);
+  const cardEl = document.getElementById(`match-${fromId}-${toId}`);
   const payload = {
     from_id: fromId,
     to_id: toId,
     status: statusEl?.value || "pending",
     notes: notesEl?.value || "",
   };
-  await fetch("/api/actions", {
+  const res = await fetch("/api/actions", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
+  if (!res.ok) {
+    showToast("Save failed. Please retry.", true);
+    return;
+  }
+  if (statusEl) {
+    statusEl.dataset.originalStatus = statusEl.value;
+  }
+  if (cardEl) {
+    cardEl.classList.remove("status-changed");
+    cardEl.classList.add("saved-flash");
+    setTimeout(() => cardEl.classList.remove("saved-flash"), 900);
+  }
+  showToast("Saved successfully");
   await loadDashboard();
   profileSelect.value = fromId;
   renderProfileMatches(fromId);
+}
+
+function showToast(message, isError = false) {
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.remove("error");
+  if (isError) {
+    toast.classList.add("error");
+  }
+  toast.classList.add("show");
+  if (toastTimer) {
+    clearTimeout(toastTimer);
+  }
+  toastTimer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 1800);
+}
+
+function bindStatusChangeTracking() {
+  document.querySelectorAll('[id^="status-"]').forEach((statusEl) => {
+    statusEl.addEventListener("change", () => {
+      const fromTo = statusEl.id.replace("status-", "");
+      const cardEl = document.getElementById(`match-${fromTo}`);
+      const original = statusEl.dataset.originalStatus || "pending";
+      if (!cardEl) return;
+      cardEl.classList.remove("status-pending", "status-approved", "status-rejected");
+      cardEl.classList.add(`status-${statusEl.value}`);
+      if (statusEl.value !== original) {
+        cardEl.classList.add("status-changed");
+      } else {
+        cardEl.classList.remove("status-changed");
+      }
+    });
+  });
 }
 
 function bindSaveButtons() {
@@ -125,6 +175,7 @@ function bindSaveButtons() {
       await saveAction(btn.dataset.from, btn.dataset.to);
     });
   });
+  bindStatusChangeTracking();
 }
 
 async function loadProfiles() {

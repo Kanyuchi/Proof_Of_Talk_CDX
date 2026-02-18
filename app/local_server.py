@@ -102,6 +102,9 @@ class MatchmakingHandler(BaseHTTPRequestHandler):
             index = STATIC_DIR / "index.html"
             self._text(index.read_text(encoding="utf-8"), content_type="text/html")
             return
+        if parsed.path == "/favicon.ico":
+            self._text("", status=204)
+            return
         if parsed.path.startswith("/static/"):
             file_name = parsed.path.replace("/static/", "", 1)
             file_path = STATIC_DIR / file_name
@@ -212,6 +215,10 @@ class MatchmakingHandler(BaseHTTPRequestHandler):
                     "per_profile": per_profile,
                 }
             )
+            return
+        if not parsed.path.startswith("/api/"):
+            index = STATIC_DIR / "index.html"
+            self._text(index.read_text(encoding="utf-8"), content_type="text/html")
             return
         self._text("Not found", status=404)
 

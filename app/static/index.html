@@ -18,23 +18,30 @@
       <button id="refreshBtn">Refresh Data</button>
     </header>
 
+    <nav class="jump-nav">
+      <a href="#overviewSection">Overview</a>
+      <a href="#topSection">Top</a>
+      <a href="#nonObviousSection">Non-Obvious</a>
+      <a href="#perProfileSection">Per-Profile</a>
+    </nav>
+
     <main class="grid">
-      <section class="card" id="overviewCard">
+      <section class="card" id="overviewSection">
         <h2>Overview</h2>
         <div class="stats" id="overviewStats"></div>
       </section>
 
-      <section class="card">
+      <section class="card" id="topSection">
         <h2>Top Intro Pairs</h2>
         <div id="topPairs"></div>
       </section>
 
-      <section class="card">
+      <section class="card" id="nonObviousSection">
         <h2>Non-Obvious High-Value Matches</h2>
         <div id="nonObviousPairs"></div>
       </section>
 
-      <section class="card full">
+      <section class="card full" id="perProfileSection">
         <div class="card-header">
           <h2>Per-Profile Recommendations</h2>
           <select id="profileSelect"></select>
@@ -42,6 +49,8 @@
         <div id="profileMatches"></div>
       </section>
     </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
     <script src="/static/app.js"></script>
   </body>

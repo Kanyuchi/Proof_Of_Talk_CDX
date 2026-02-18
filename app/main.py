@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -123,6 +123,11 @@ def with_actions(per_profile: Dict[str, List[Dict[str, Any]]]) -> Dict[str, List
 @app.get("/", include_in_schema=False)
 def root() -> FileResponse:
     return FileResponse(STATIC_DIR / "index.html")
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon() -> Response:
+    return Response(status_code=204)
 
 
 @app.get("/health")
@@ -249,3 +254,11 @@ def dashboard() -> Dict[str, Any]:
         "top_non_obvious_pairs": non_obvious,
         "per_profile": per_profile,
     }
+
+
+@app.get("/{full_path:path}", include_in_schema=False)
+def spa_fallback(full_path: str) -> FileResponse:
+    # Keep API-like paths strict while serving index.html for UI deep links.
+    if full_path.startswith("api/") or full_path.startswith("static/"):
+        raise HTTPException(status_code=404, detail="Not Found")
+    return FileResponse(STATIC_DIR / "index.html")
