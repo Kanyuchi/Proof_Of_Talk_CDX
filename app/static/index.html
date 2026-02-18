@@ -3,55 +3,189 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Proof of Talk Matchmaking Dashboard</title>
+    <title>POT Matchmaker</title>
     <link rel="stylesheet" href="/static/styles.css" />
   </head>
   <body>
-    <header class="hero">
-      <div>
-        <p class="eyebrow">Proof of Talk 2026</p>
-        <h1>AI Matchmaking Organizer Dashboard</h1>
-        <p class="sub">
-          Prioritize the highest-value intros across investors, builders, and regulators.
-        </p>
+    <header class="topbar">
+      <div class="brand">POT Matchmaker</div>
+      <nav class="main-nav">
+        <a href="/" data-route="/">Home</a>
+        <a href="/attendees" data-route="/attendees">Attendees</a>
+        <a href="/dashboard" data-route="/dashboard">Dashboard</a>
+        <a href="/chat" data-route="/chat">Chat</a>
+      </nav>
+      <div class="auth-actions">
+        <button id="authBtn" class="btn ghost">Sign in</button>
       </div>
-      <button id="refreshBtn">Refresh Data</button>
     </header>
 
-    <nav class="jump-nav">
-      <a href="#overviewSection">Overview</a>
-      <a href="#topSection">Top</a>
-      <a href="#nonObviousSection">Non-Obvious</a>
-      <a href="#perProfileSection">Per-Profile</a>
-    </nav>
-
-    <main class="grid">
-      <section class="card" id="overviewSection">
-        <h2>Overview</h2>
-        <div class="stats" id="overviewStats"></div>
-      </section>
-
-      <section class="card" id="topSection">
-        <h2>Top Intro Pairs</h2>
-        <div id="topPairs"></div>
-      </section>
-
-      <section class="card" id="nonObviousSection">
-        <h2>Non-Obvious High-Value Matches</h2>
-        <div id="nonObviousPairs"></div>
-      </section>
-
-      <section class="card full" id="perProfileSection">
-        <div class="card-header">
-          <h2>Per-Profile Recommendations</h2>
-          <select id="profileSelect"></select>
+    <main class="shell">
+      <section id="view-home" class="view">
+        <div class="hero">
+          <p class="chip">AI-Powered Matchmaking Engine</p>
+          <h1>The Right Meeting Changes Everything</h1>
+          <p class="lead">
+            2,500 decision-makers, $18T in assets, and a ranking engine designed for
+            high-conviction intros before the event starts.
+          </p>
+          <div class="row">
+            <button class="btn primary" id="homeViewMatches">View Matches</button>
+            <button class="btn ghost" id="homeOpenDashboard">Organizer Dashboard</button>
+          </div>
         </div>
-        <div id="profileMatches"></div>
+
+        <div class="cards three">
+          <article class="panel">
+            <h3>Multi-Source Intelligence</h3>
+            <p>Registration data + social/company/funding signals in one profile graph.</p>
+          </article>
+          <article class="panel">
+            <h3>AI Matching Pipeline</h3>
+            <p>Weighted fit and complementarity, then explainable rationale generation.</p>
+          </article>
+          <article class="panel">
+            <h3>Contextual Explanations</h3>
+            <p>Every intro has a clear “why now” and risk/confidence trace.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="view-attendees" class="view hidden">
+        <div class="section-head">
+          <h2>Attendees</h2>
+          <p id="attendeeCount">0 decision-makers registered</p>
+        </div>
+        <div class="toolbar">
+          <input id="attendeeSearch" placeholder="Search by name, company, or title..." />
+          <select id="attendeeRole">
+            <option value="">All roles</option>
+            <option value="vip">VIP</option>
+            <option value="speaker">Speaker</option>
+            <option value="sponsor">Sponsor</option>
+            <option value="delegate">Delegate</option>
+            <option value="attendee">Attendee</option>
+          </select>
+          <button class="btn ghost" id="attendeeRefresh">Refresh</button>
+        </div>
+        <div id="attendeeList" class="list"></div>
+      </section>
+
+      <section id="view-dashboard" class="view hidden">
+        <div class="section-head">
+          <h2>Organizer Dashboard</h2>
+          <button class="btn ghost" id="refreshBtn">Refresh Data</button>
+        </div>
+
+        <nav class="jump-nav">
+          <a href="#overviewSection">Overview</a>
+          <a href="#topSection">Top</a>
+          <a href="#nonObviousSection">Non-Obvious</a>
+          <a href="#perProfileSection">Per-Profile</a>
+        </nav>
+
+        <div class="grid">
+          <section class="panel" id="overviewSection">
+            <h3>Overview</h3>
+            <div class="stats" id="overviewStats"></div>
+          </section>
+          <section class="panel" id="topSection">
+            <h3>Top Intro Pairs</h3>
+            <div id="topPairs"></div>
+          </section>
+          <section class="panel" id="nonObviousSection">
+            <h3>Non-Obvious High-Value Matches</h3>
+            <div id="nonObviousPairs"></div>
+          </section>
+          <section class="panel full" id="perProfileSection">
+            <div class="row">
+              <h3>Per-Profile Recommendations</h3>
+              <select id="profileSelect"></select>
+            </div>
+            <div id="profileMatches"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="view-chat" class="view hidden">
+        <div class="section-head">
+          <h2>Private Match Chat</h2>
+          <p>Only matched attendees can message each other.</p>
+        </div>
+        <div id="chatAuthHint" class="panel">
+          <p>Sign in to access matched peer chat and update your attendee profile.</p>
+        </div>
+        <div id="chatLayout" class="chat-layout hidden">
+          <aside class="panel chat-peers">
+            <h3>Matched Peers</h3>
+            <div id="peerList"></div>
+          </aside>
+          <section class="panel chat-thread">
+            <h3 id="chatThreadTitle">Conversation</h3>
+            <div id="chatMessages" class="chat-messages"></div>
+            <div class="row">
+              <input id="chatInput" placeholder="Write a private message..." />
+              <button id="chatSendBtn" class="btn primary">Send</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section id="view-auth" class="view hidden">
+        <div class="cards two">
+          <section class="panel">
+            <h3>Create account</h3>
+            <form id="registerForm" class="form">
+              <input name="full_name" placeholder="Full name" required />
+              <input name="email" type="email" placeholder="Email" required />
+              <input name="password" type="password" placeholder="Password (8+ chars)" required />
+              <input name="title" placeholder="Title" />
+              <input name="organization" placeholder="Organization" />
+              <select name="role">
+                <option value="attendee">Attendee</option>
+                <option value="vip">VIP</option>
+                <option value="speaker">Speaker</option>
+                <option value="sponsor">Sponsor</option>
+                <option value="delegate">Delegate</option>
+              </select>
+              <input name="website" placeholder="Website URL" />
+              <input name="linkedin" placeholder="LinkedIn URL" />
+              <textarea name="bio" placeholder="Short bio"></textarea>
+              <button class="btn primary" type="submit">Create Account</button>
+            </form>
+          </section>
+
+          <section class="panel">
+            <h3>Sign in</h3>
+            <form id="loginForm" class="form">
+              <input name="email" type="email" placeholder="Email" required />
+              <input name="password" type="password" placeholder="Password" required />
+              <button class="btn primary" type="submit">Sign in</button>
+            </form>
+            <hr />
+            <h3>My profile</h3>
+            <form id="profileForm" class="form">
+              <input name="full_name" placeholder="Full name" required />
+              <input name="title" placeholder="Title" />
+              <input name="organization" placeholder="Organization" />
+              <select name="role">
+                <option value="attendee">Attendee</option>
+                <option value="vip">VIP</option>
+                <option value="speaker">Speaker</option>
+                <option value="sponsor">Sponsor</option>
+                <option value="delegate">Delegate</option>
+              </select>
+              <input name="website" placeholder="Website URL" />
+              <input name="linkedin" placeholder="LinkedIn URL" />
+              <textarea name="bio" placeholder="Short bio"></textarea>
+              <button class="btn ghost" type="submit">Update Profile</button>
+            </form>
+          </section>
+        </div>
       </section>
     </main>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
     <script src="/static/app.js"></script>
   </body>
 </html>

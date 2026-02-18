@@ -27,6 +27,7 @@ def enrich_profile(profile: Dict[str, Any]) -> Dict[str, Any]:
             str(profile.get("product", "")),
             str(profile.get("thesis", "")),
             str(profile.get("focus", "")),
+            str(profile.get("bio", "")),
             " ".join(profile.get("looking_for", [])),
         ]
     ).lower()

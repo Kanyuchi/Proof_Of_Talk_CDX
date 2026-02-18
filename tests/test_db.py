@@ -40,6 +40,45 @@ class DbTest(unittest.TestCase):
         s = db.backend_summary()
         self.assertEqual(s["backend"], "sqlite")
 
+    def test_sqlite_user_and_chat_round_trip(self) -> None:
+        with tempfile.TemporaryDirectory() as td:
+            path = Path(td) / "chat.db"
+            os.environ["DATABASE_URL"] = f"sqlite:///{path}"
+            db.init_db()
+            db.create_user(
+                user_id="u1",
+                email="a@example.com",
+                password_hash="hash",
+                full_name="Alice",
+                title="CTO",
+                organization="Alpha",
+                role="attendee",
+                profile_id="p_alice",
+                created_at="2026-02-18T00:00:00Z",
+            )
+            db.create_user(
+                user_id="u2",
+                email="b@example.com",
+                password_hash="hash2",
+                full_name="Bob",
+                title="Investor",
+                organization="Beta",
+                role="vip",
+                profile_id="p_bob",
+                created_at="2026-02-18T00:01:00Z",
+            )
+            self.assertEqual(db.get_user_by_email("a@example.com")["id"], "u1")
+            db.update_user_profile_fields("u1", "Alice Updated", "CPO", "AlphaX", "speaker")
+            self.assertEqual(db.get_user_by_id("u1")["role"], "speaker")
+
+            db.insert_chat_message("u1", "u2", "hello", "2026-02-18T01:00:00Z")
+            db.insert_chat_message("u2", "u1", "hi", "2026-02-18T01:01:00Z")
+            thread = db.get_chat_messages_between("u1", "u2")
+            self.assertEqual(len(thread), 2)
+            self.assertEqual(thread[0]["body"], "hello")
+            activity = db.get_recent_chat_activity_for_user("u1")
+            self.assertGreaterEqual(len(activity), 2)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -12,10 +12,11 @@ Build a premium matchmaking product for Proof of Talk 2026 that:
 ## Current Implementation
 - `app/main.py`: FastAPI backend with interactive docs (`/docs`)
 - `app/server.py`: compatibility launcher for FastAPI (`python3 app/server.py`)
+- `app/auth.py`: custom JWT auth + password hashing (Option 1 implementation)
 - `app/matching.py`: weighted matching logic + risk indicators + non-obvious match detection
 - `app/enrichment.py`: mock enrichment layer for profile signal expansion
 - `app/db.py`: multi-database persistence layer (`SQLite`, `PostgreSQL`, `MySQL`) via `DATABASE_URL`
-- `app/static/*`: organizer dashboard (overview, top intro pairs, non-obvious matches, per-profile actions)
+- `app/static/*`: multi-view UX (Home, Attendees, Dashboard, Chat, Auth/Profile)
 - `scripts/generate_matches.py`: offline match generation
 - `data/test_profiles.json`: 5 required case-study personas
 - `data/match_results.json`: generated ranked matches
@@ -44,6 +45,11 @@ FastAPI docs (when dependencies are installed): `http://127.0.0.1:8000/docs`
 
 ## API Endpoints
 - `GET /health`
+- `POST /api/auth/register`
+- `POST /api/auth/login`
+- `GET /api/auth/me`
+- `PUT /api/profile/me`
+- `GET /api/attendees`
 - `GET /api/profiles`
 - `POST /api/profiles/ingest`
 - `POST /api/profiles/reset`
@@ -53,6 +59,9 @@ FastAPI docs (when dependencies are installed): `http://127.0.0.1:8000/docs`
 - `GET /api/dashboard`
 - `GET /api/actions`
 - `POST /api/actions`
+- `GET /api/chat/peers` (auth required)
+- `GET /api/chat/messages/{peer_user_id}` (auth required + matched peers only)
+- `POST /api/chat/messages` (auth required + matched peers only)
 - `GET /docs` (FastAPI interactive docs)
 
 ## Level Mapping
@@ -84,6 +93,13 @@ FastAPI docs (when dependencies are installed): `http://127.0.0.1:8000/docs`
 - `ENABLE_LLM_RATIONALE=1`: enable LLM-generated explanations.
 - `OPENAI_API_KEY=<key>`: required when `ENABLE_LLM_RATIONALE=1`.
 - `OPENAI_MODEL=gpt-4.1-mini`: optional LLM model override.
+- `APP_JWT_SECRET=<strong-random-secret>`: signing key for custom JWT auth tokens.
+
+## Auth Flow (Option 1)
+1. Register in UI (`/auth`) or via `POST /api/auth/register`.
+2. Sign in with `POST /api/auth/login`.
+3. Token is used as `Authorization: Bearer <token>`.
+4. Private chat is enabled only for matched attendee pairs.
 
 ## Testing
 ```bash

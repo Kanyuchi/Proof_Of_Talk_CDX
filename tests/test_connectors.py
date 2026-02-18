@@ -11,6 +11,7 @@ from app.connectors import (
     parse_crunchbase_payload,
     parse_openalex_payload,
     run_live_connectors,
+    social_profile_enrichment,
     structured_profile_funding_enrichment,
 )
 
@@ -90,6 +91,12 @@ class ConnectorsTest(unittest.TestCase):
         tags = parse_openalex_payload(payload)
         self.assertIn("research_intensity:medium", tags)
         self.assertIn("research_topic:cryptography", tags)
+
+    def test_social_profile_enrichment(self) -> None:
+        profile = {"social_links": {"linkedin": "https://linkedin.com/in/demo", "github": "https://github.com/demo"}}
+        result = social_profile_enrichment(profile)
+        self.assertIn("social_presence:linkedin", result["tags"])
+        self.assertIn("social_presence:github", result["tags"])
 
     def test_run_live_connectors_with_missing_keys(self) -> None:
         os.environ["LIVE_CONNECTORS"] = "clearbit,crunchbase,structured_funding"

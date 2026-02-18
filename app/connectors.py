@@ -191,6 +191,25 @@ def structured_profile_funding_enrichment(profile: Dict[str, Any]) -> Dict[str, 
     )
 
 
+def social_profile_enrichment(profile: Dict[str, Any]) -> Dict[str, Any]:
+    links = profile.get("social_links") if isinstance(profile.get("social_links"), dict) else {}
+    tags: List[str] = []
+    sources: List[str] = []
+
+    for platform in ["linkedin", "x", "twitter", "github", "telegram"]:
+        url = str(links.get(platform, "")).strip()
+        if url:
+            tags.append(f"social_presence:{platform}")
+            sources.append(f"social_profile:{platform}")
+
+    return _result(
+        "social_profiles",
+        tags=tags,
+        confidence_delta=0.03 if tags else 0.0,
+        sources=sources,
+    )
+
+
 def clearbit_enrichment(profile: Dict[str, Any]) -> Dict[str, Any]:
     api_key = os.getenv("CLEARBIT_API_KEY", "").strip()
     if not api_key:
@@ -282,6 +301,7 @@ def openalex_enrichment(profile: Dict[str, Any]) -> Dict[str, Any]:
 CONNECTOR_REGISTRY = {
     "website": website_signal_enrichment,
     "structured_funding": structured_profile_funding_enrichment,
+    "social_profiles": social_profile_enrichment,
     "clearbit": clearbit_enrichment,
     "crunchbase": crunchbase_enrichment,
     "openalex": openalex_enrichment,
@@ -289,7 +309,7 @@ CONNECTOR_REGISTRY = {
 
 
 def _enabled_connectors() -> List[str]:
-    raw = os.getenv("LIVE_CONNECTORS", "website,structured_funding")
+    raw = os.getenv("LIVE_CONNECTORS", "website,structured_funding,social_profiles")
     requested = [c.strip() for c in raw.split(",") if c.strip()]
     valid = [c for c in requested if c in CONNECTOR_REGISTRY]
     return valid or ["website", "structured_funding"]
